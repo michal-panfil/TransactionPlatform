@@ -1,0 +1,46 @@
+﻿@model TransactionPlatform.WebApp.Models.DashBoardDto;
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div class="container">
+        <div class="row">
+            <table class="table bg-success text-white">
+                <tbody>
+                    <tr>
+                        <td>Avalible Cash:</td>
+                        <td>$ @Model.UserWallet.Cash </td>
+                        <td>Estimated assets:</td>
+                        <td>$ @Model.UserWallet.EstimatedValue</td>
+                        <td>ROI:</td>
+                        <td>@Model.UserWallet.ROI %</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="col-sm">
+                <partial name="_simpleInstrumentsList" />
+            </div>
+            <div class="col-sm">
+                <partial name="_simpleWallet" />
+                <div class="row">
+                    <div class="col-sm">
+
+                        <partial name="_smallPriceDiagram" />
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-sm">
+
+            <partial name="_smallNewsBox" />
+
+        </div>
+
+
+    </div>
+

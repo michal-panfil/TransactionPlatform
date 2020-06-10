@@ -1,0 +1,86 @@
+﻿@model DashBoardDto;
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            
+            <th scope="col">Ticker</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Volumen</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var instrument in Model.Instruments)
+        {
+            <tr data-toggle="tooltip" title= "@instrument.Description">
+                <td>@instrument.Ticker</td>
+                <td>@instrument.Name</td>
+                <td> ajax</td>
+                <td> ajax</td>
+                <td><button class="btn btn-success">buy</button></td>
+            </tr>
+        }
+        <!--<tr>
+                <td>OBR</td>
+                <td>Oil Brand</td>
+                <td>$32</td>
+                <td>$500343</td>
+                <td><button class="btn btn-success">buy</button></td>
+            </tr>
+            <tr>
+                <td>CAU</td>
+                <td>Coal Australian</td>
+                <td>$745</td>
+                <td>$6548652</td>
+                <td><button class="btn btn-success">buy</button></td>
+            </tr>
+            <tr>
+                <td>RCH</td>
+                <td>Rice Chinis</td>
+                <td>$325</td>
+                <td>32343</td>
+                <td><button class="btn btn-success">buy</button></td>
+            </tr>
+            <tr>
+                <td>OND</td>
+                <td>Oil North See</td>
+                <td>$39</td>
+                <td>$1500343</td>
+                <td><button class="btn btn-success">buy</button></td>
+            </tr>
+            <tr>
+                <td>OBR</td>
+                <td>Oil Brand</td>
+                <td>$32</td>
+                <td>$500343</td>
+                <td><button class="btn btn-success">buy</button></td>
+            </tr>
+            <tr>
+                <td>CAU</td>
+                <td>Coal Australian</td>
+                <td>$745</td>
+                <td>$6548652</td>
+                <td><button class="btn btn-success">buy</button></td>
+            </tr>
+            <tr>
+                <td>RCH</td>
+                <td>Rice Chinis</td>
+                <td>$325</td>
+                <td>32343</td>
+                <td><button class="btn btn-success">buy</button></td>
+            </tr>
+            <tr>
+                <td>OND</td>
+                <td>Oil North See</td>
+                <td>$39</td>
+                <td>$1500343</td>
+                <td><button class="btn btn-success">buy</button></td>
+            </tr>
+    -->
+    </tbody>
+</table>
