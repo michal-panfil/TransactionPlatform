@@ -12,18 +12,21 @@ namespace TransactionPlatform.WebApp.Controllers
 {
     public class DashBoardController : Controller
     {
-        public DashBoardController(TransactionContext context)
+        public DashBoardController(TransactionContext context, IDataAcces data)
         {
-            Context = context;
+            Data = data;
+            Data.Context = context;
         }
 
         public TransactionContext Context { get; }
+        public IDataAcces Data { get; }
 
         public async Task<IActionResult> Index()
         {
             var model = new DashBoardDto();
-            var instruments = Context.Instruments.ToList();
-            model.Instruments = instruments;
+            var instrumentsTask =   Data.GetAllInstrumentsAsync();
+            var apiCaller = new ApiCaller();
+            var wallet = apiCaller.GetWalletFromAPI(1);
             /* 1.create dashboard DTO
              * 
              * async prepareInstrumentsDto()
@@ -45,7 +48,11 @@ namespace TransactionPlatform.WebApp.Controllers
 
             var mockUp = new MockUpDashboardDto();
             var modelMU = mockUp.GetMockUpDashboard();
-            
+
+            var instruments = await instrumentsTask;
+            model.Instruments = instruments;
+            model.UserWallet = wallet;
+            modelMU.Instruments = instruments;
             return View(modelMU);
         }
     }

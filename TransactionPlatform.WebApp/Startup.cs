@@ -26,6 +26,8 @@ namespace TransactionPlatform.WebApp
         {
             services.AddDbContext<TransactionContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllersWithViews();
+            services.AddSingleton<IDataAcces, DataAccesBase>();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
