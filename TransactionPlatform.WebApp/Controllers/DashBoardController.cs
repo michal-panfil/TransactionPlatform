@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TransactionPlatform.DomainLibrary.Models;
 using TransactionPlatform.WebApp.Data;
 using TransactionPlatform.WebApp.Models;
+using System.Net.Http;
 
 namespace TransactionPlatform.WebApp.Controllers
 {
@@ -24,9 +26,32 @@ namespace TransactionPlatform.WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var model = new DashBoardDto();
+        
             var instrumentsTask =   Data.GetAllInstrumentsAsync();
             var apiCaller = new ApiCaller();
-            var wallet = apiCaller.GetWalletFromAPI(1);
+            Wallet wallet;
+            try { 
+                wallet = apiCaller.GetWalletFromAPI(1);
+            }catch(HttpRequestException ex)
+            {
+                 wallet = new Wallet()
+                {
+                    Cash = 1,
+                    SumInvestedMoney = 1
+
+                };
+            }
+
+            //var mockUp = new MockUpDashboardDto();
+            //var modelMU = mockUp.GetMockUpDashboard();
+
+            var instruments = await instrumentsTask;
+            model.Instruments = instruments;
+            model.UserWallet = wallet;
+            //modelMU.Instruments = instruments;
+            return View(model);
+
+
             /* 1.create dashboard DTO
              * 
              * async prepareInstrumentsDto()
@@ -43,17 +68,6 @@ namespace TransactionPlatform.WebApp.Controllers
              * 
              * 10.await return model
              */
-
-
-
-            var mockUp = new MockUpDashboardDto();
-            var modelMU = mockUp.GetMockUpDashboard();
-
-            var instruments = await instrumentsTask;
-            model.Instruments = instruments;
-            model.UserWallet = wallet;
-            modelMU.Instruments = instruments;
-            return View(modelMU);
         }
     }
 }

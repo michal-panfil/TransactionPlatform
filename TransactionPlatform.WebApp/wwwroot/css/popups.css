@@ -1,0 +1,24 @@
+﻿body {
+}
+
+.popup-box {
+    display: none;
+    position: fixed;
+    top: 30vh;
+    left: 30vw;
+    width: auto;
+    height: auto;
+    background-color: aliceblue;
+    z-index: 9999;
+    padding : 40px;
+    border: 1px solid grey;
+    box-shadow: grey 7px 7px 5px;
+}
+
+.request-succes {
+    display: inline-block;
+    background-color: forestgreen;
+    color: aliceblue;
+    
+}
+   
