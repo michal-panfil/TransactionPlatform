@@ -29,5 +29,10 @@ namespace TransactionPlatform.TransactionService
             }
             return composite;
         }
+
+        public float GetPriceOfInstrument(int id)
+        {
+            return id * 1.5f;
+        }
     }
 }

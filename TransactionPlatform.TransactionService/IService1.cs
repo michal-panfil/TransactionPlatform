@@ -19,6 +19,9 @@ namespace TransactionPlatform.TransactionService
         [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);
 
+        [OperationContract]
+        float GetPriceOfInstrument(int id);
+
         // TODO: Add your service operations here
     }
 
