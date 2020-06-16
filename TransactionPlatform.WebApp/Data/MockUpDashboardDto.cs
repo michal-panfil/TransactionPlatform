@@ -16,12 +16,12 @@ namespace TransactionPlatform.WebApp.Data
 
             var dashboard = new DashBoardDto();
             
-            var assets = new List<Asset> {
+           /* var assets = new List<AssetDtp> {
                 new Asset{Id =1, InstrumentId = 1, UserId=1, BuyDT = DateTime.Now, Price = 200M, Volumen = 550},
                 new Asset{Id =2, InstrumentId = 2, UserId=1, BuyDT = DateTime.Now, Price = 52M, Volumen = 700},
                 new Asset{Id =3, InstrumentId = 3, UserId=1, BuyDT = DateTime.Now, Price = 11M, Volumen = 1420}
 
-            };
+            };*/
 
             dashboard.UserWallet = new Wallet()
             {
@@ -29,7 +29,7 @@ namespace TransactionPlatform.WebApp.Data
                 OwnerId = 1,
                 Cash = 13400,
                 SumInvestedMoney= 50000,
-                Assets = assets,
+               // Assets = assets,
             };
             /*
             dashboard.Instruments.Add(new Instrument() {Id = 1, Name = "Oil Barnd 3", Ticker= "OB3", Description ="The clearest and moste value cartify oil"}); 

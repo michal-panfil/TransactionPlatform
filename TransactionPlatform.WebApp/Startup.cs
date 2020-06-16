@@ -14,6 +14,7 @@ namespace TransactionPlatform.WebApp
 {
     public class Startup
     {
+        readonly string MyOrigin = "MyOrigin";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,6 +29,8 @@ namespace TransactionPlatform.WebApp
             services.AddControllersWithViews();
             services.AddSingleton<IDataAcces, DataAccesBase>();
             services.AddHttpClient();
+            services.AddCors(options =>
+            options.AddPolicy(name: MyOrigin, builder => { builder.AllowAnyOrigin(); }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +56,8 @@ namespace TransactionPlatform.WebApp
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseCors(MyOrigin);
         }
     }
 }

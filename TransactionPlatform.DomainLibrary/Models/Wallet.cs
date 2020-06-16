@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using TransactionPlatform.DomainLibrary.Dtos;
 
 namespace TransactionPlatform.DomainLibrary.Models
 {
@@ -13,14 +14,14 @@ namespace TransactionPlatform.DomainLibrary.Models
         public decimal Cash { get; set; }
 
         public decimal EstimatedValue { get => CalculateEstimatedValue(); }
-        public List<Asset> Assets { get; set; }
+        public List<AssetDto> Assets { get; set; }
 
         public decimal SumInvestedMoney { get; set; }
         public decimal ROI => Math.Round(((EstimatedValue - SumInvestedMoney) / SumInvestedMoney),1);
 
         public Wallet()
         {
-            Assets = new List<Asset>();
+            Assets = new List<AssetDto>();
         }
 
         private decimal CalculateEstimatedValue()
@@ -30,7 +31,7 @@ namespace TransactionPlatform.DomainLibrary.Models
             {
                 foreach (var asset in Assets)
                 {
-                    estimatedValue += asset.CurrentInstrumentValue();
+                    estimatedValue += asset.CurrentInstrumentValue;
                 }
             }
             return estimatedValue;

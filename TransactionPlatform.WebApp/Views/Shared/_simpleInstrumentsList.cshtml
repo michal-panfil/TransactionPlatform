@@ -14,14 +14,16 @@
             <th scope="col">Action</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="instrumentsList">
         @foreach (var instrument in Model.Instruments)
         {
-            <tr data-toggle="tooltip" title= "@instrument.Description">
+            var identificator = $"instrument"+ @instrument.Id.ToString();
+
+            <tr id=@identificator data-toggle="tooltip" title= "@instrument.Description">
                 <td>@instrument.Ticker</td>
                 <td>@instrument.Name</td>
-                <td> ajax</td>
-                <td> ajax</td>
+                <td class="instrument-price-item"> ajax</td>
+                <td class="instrument-volumen-item"> ajax</td>
                 <td><button class="btn btn-success" onclick="OpenBuyInstrumentForm()">buy</button></td>
             </tr>
         }

@@ -11,5 +11,6 @@ namespace TransactionPlatform.DomainLibrary.Dtos
         public string Name { get; set; }
         public int Volumen { get; set; }
         public decimal InitialPrice { get; set; }
+        public decimal CurrentInstrumentValue { get; set; }
     }
 }

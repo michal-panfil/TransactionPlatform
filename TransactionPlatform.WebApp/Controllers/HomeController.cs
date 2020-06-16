@@ -18,10 +18,10 @@ namespace TransactionPlatform.WebApp.Controllers
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var client = new ServiceReference1.Service1Client();
-            try{
+            /*try{
 
                 var wcfTask = client.GetPriceOfInstrumentAsync(10);
                 ViewBag.client = await  wcfTask;
@@ -31,7 +31,7 @@ namespace TransactionPlatform.WebApp.Controllers
             catch
             {
                 ViewBag.client = " wcf is not avalible";
-            }
+            }*/
             return View();
         }
 

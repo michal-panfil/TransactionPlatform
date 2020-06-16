@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using TransactionPlatform.DomainLibrary.Dtos;
 
 namespace TransactionPlatform.TransactionService
 {
@@ -12,22 +13,44 @@ namespace TransactionPlatform.TransactionService
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class Service1 : IService1
     {
-        public string GetData(int value)
+        public List<InstrumentPriceDto> GetPriceOfAllInstruments()
         {
-            return string.Format("You entered: {0}", value);
+
+            var priceList = new List<InstrumentPriceDto>();
+            /*
+			 * 1. call API to get List of Instruments
+			 * 2. generate price for each one by random method
+			 * 
+			 */
+            var api = new ApiCaller();
+            var instruments = api.GetAllInstruments();
+
+            foreach (var instrument in instruments)
+            {
+                priceList.Add(new InstrumentPriceDto { Id = instrument.Id, Price = instrument.Id + 100, PriceDate = DateTime.UtcNow });
+            }
+
+            return priceList;
         }
 
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
+        public List<InstrumentPriceDto> GetPriceOfAllInstrumentsAsync()
         {
-            if (composite == null)
+
+            var priceList = new List<InstrumentPriceDto>();
+            /*
+			 * 1. call API to get List of Instruments
+			 * 2. generate price for each one by random method
+			 * 
+			 */
+            var api = new ApiCaller();
+            var instruments = api.GetAllInstruments();
+
+            foreach (var instrument in instruments)
             {
-                throw new ArgumentNullException("composite");
+                priceList.Add(new InstrumentPriceDto { Id = instrument.Id, Price = instrument.Id + 100, PriceDate = DateTime.UtcNow });
             }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
+
+            return priceList;
         }
 
         public float GetPriceOfInstrument(int id)

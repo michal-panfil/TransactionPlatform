@@ -26,48 +26,15 @@ namespace TransactionPlatform.WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var model = new DashBoardDto();
-        
-            var instrumentsTask =   Data.GetAllInstrumentsAsync();
             var apiCaller = new ApiCaller();
-            Wallet wallet;
-            try { 
-                wallet = apiCaller.GetWalletFromAPI(1);
-            }catch(HttpRequestException ex)
-            {
-                 wallet = new Wallet()
-                {
-                    Cash = 1,
-                    SumInvestedMoney = 1
+            
+            var walletTsk =  apiCaller.GetWalletFromAPI(1);
+            var instrumentsTsk = apiCaller.GetInstrumentsFromAPI();
 
-                };
-            }
-
-            //var mockUp = new MockUpDashboardDto();
-            //var modelMU = mockUp.GetMockUpDashboard();
-
-            var instruments = await instrumentsTask;
-            model.Instruments = instruments;
-            model.UserWallet = wallet;
-            //modelMU.Instruments = instruments;
+            model.Instruments = await instrumentsTsk;
+            model.UserWallet = await walletTsk;         
             return View(model);
 
-
-            /* 1.create dashboard DTO
-             * 
-             * async prepareInstrumentsDto()
-             * 2.call db for all instrumetns
-             * 3.convert instrunents in Dto
-             * 4.add instruments to model
-             * 
-             * async prepareWalettDto(userId)
-             * 5.Crate wallet
-             * 6.call api for wallet data
-             * 7.separtate assets and turn into assetdto
-             * 8.build walletDto and  add assetsDto to it
-             * 9.add walletDto to model
-             * 
-             * 10.await return model
-             */
         }
     }
 }
