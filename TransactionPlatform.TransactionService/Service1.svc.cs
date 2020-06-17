@@ -15,7 +15,7 @@ namespace TransactionPlatform.TransactionService
     {
         public List<InstrumentPriceDto> GetPriceOfAllInstruments()
         {
-
+            var rnd = new Random();
             var priceList = new List<InstrumentPriceDto>();
             /*
 			 * 1. call API to get List of Instruments
@@ -27,7 +27,7 @@ namespace TransactionPlatform.TransactionService
 
             foreach (var instrument in instruments)
             {
-                priceList.Add(new InstrumentPriceDto { Id = instrument.Id, Price = instrument.Id + 100, Volumen = instrument.Id * 1500,  PriceDate = DateTime.UtcNow });
+                priceList.Add(new InstrumentPriceDto { Id = instrument.Id, Price = (decimal)(rnd.Next(23,89)), Volumen = instrument.Id * 1500,  PriceDate = DateTime.UtcNow });
             }
 
             return priceList;

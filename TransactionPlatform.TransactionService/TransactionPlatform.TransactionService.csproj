@@ -66,20 +66,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiCaller.cs" />
-    <Compile Include="BasePriceService.svc.cs">
-      <DependentUpon>BasePriceService.svc</DependentUpon>
-    </Compile>
-    <Content Include="BasePriceService.svc" />
-    <Content Include="PriceServiceMockUp.svc" />
     <Content Include="Service1.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IBasePriceService.cs" />
-    <Compile Include="IPriceServiceMockUp.cs" />
-    <Compile Include="PriceServiceMockUp.svc.cs">
-      <DependentUpon>PriceServiceMockUp.svc</DependentUpon>
-    </Compile>
     <Compile Include="Service1.svc.cs">
       <DependentUpon>Service1.svc</DependentUpon>
     </Compile>
@@ -90,7 +80,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="libman.json" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
