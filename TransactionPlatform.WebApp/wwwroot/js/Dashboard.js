@@ -1,6 +1,5 @@
 ﻿let currentInstrumentId;
 let Currentitem;
-
 function OpenBuyInstrumentForm() {
     let popup = $('.popup-box');
     popup.toggle();
@@ -26,41 +25,21 @@ function GetInstrumentPrices() {
         success: function (response) {
             console.log("response : ")
             console.dir(response)
-            
             response.forEach(AssingPriceToInstrument);
-            
-            
         },
         error: function () { console.log("error") }
     })
 }
 function AssingPriceToInstrument(item) {
-    Currentitem = item
-    let instruments = $('#instrumentsList').children();
-    let instrumentsArr = instruments.toArray();
+    currentInstrumentId = '#instrument' + item.id;
+    let inst = $(currentInstrumentId);
+    let currInstPrice = inst.find('.instrument-price-item');
+    let currInstVolumen = inst.find('.instrument-volumen-item');
 
-    console.log("item dir :")
-        console.dir(item);
-        console.log("instrument id :")
-        console.log(item.id);
+    currInstPrice.text(item.price);
+    currInstVolumen.text(item.volumen);
 
-         currentInstrumentId = '#instrument' + item.id;
-        console.log(currentInstrumentId);
-    let inst = instrumentsArr.find(findInstrument);
-    let inst2 = $(currentInstrumentId);
-    
-    console.log("inst : ");
-   console.dir(inst);
-    let currInst = inst2.find('.instrument-price-item');
-    console.log("currInst : ");
-    console.dir(currInst);
-    
-    currInst.text(item.price);
-    console.log("price");
 
-    console.log(item.price);
-        console.log(currInst);
-    console.log("------------");
 }
 
 function findInstrument(element, index, array){

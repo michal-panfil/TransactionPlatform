@@ -27,7 +27,7 @@ namespace TransactionPlatform.TransactionService
 
             foreach (var instrument in instruments)
             {
-                priceList.Add(new InstrumentPriceDto { Id = instrument.Id, Price = instrument.Id + 100, PriceDate = DateTime.UtcNow });
+                priceList.Add(new InstrumentPriceDto { Id = instrument.Id, Price = instrument.Id + 100, Volumen = instrument.Id * 1500,  PriceDate = DateTime.UtcNow });
             }
 
             return priceList;
