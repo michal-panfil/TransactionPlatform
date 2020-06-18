@@ -11,13 +11,11 @@ namespace TransactionPlatform.WebApp.Data
     public class TransactionContext :  DbContext
     {
 
-        public TransactionContext(DbContextOptions<TransactionContext> options) : base(options)
-        {
-
-        }
-
+        public TransactionContext(DbContextOptions<TransactionContext> options) : base(options){ }
 
         public DbSet<Instrument> Instruments { get; set; }
+        public DbSet<UsersAccess> UsersAccesses { get; set; }
+        public DbSet<User> Users { get; set;}
 
 }
 }
