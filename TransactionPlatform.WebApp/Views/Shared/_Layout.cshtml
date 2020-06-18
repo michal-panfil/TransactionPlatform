@@ -10,9 +10,11 @@
 </head>
 <body>
     <header>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/Images/logov2small.jpg" alt="logo"  /></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/Images/logov2small.jpg" alt="logo" /></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -32,26 +34,34 @@
                             <div class="form-row">
                                 <!-- Grid column -->
                                 <div>
-                                    <!-- Material input -->
-                                    <div class="md-form form-group">
-                                        <input type="email" class="form-control" id="inputEmail4MD" placeholder="Email">
-                                    </div>
-                                </div>
-                                <div>
-                                    <!-- Material input -->
-                                    <div class="md-form form-group">
-                                        <input type="email" class="form-control" id="inputEmail4MD" placeholder="Password">
-                                    </div>
-                                </div>
-                                <div>
-                                    <a class="btn  btn-primary text-light ml-3 ">Log in</a>
-                                    <a class="btn  btn-primary text-light ml-1">Sign up</a>
+                                    <a class="btn  btn-primary text-light ml-3 " onclick="showLogin()">Log in</a>
+                                    <a class="btn  btn-primary text-light ml-1" onclick="showSignUp()">Sign up</a>
 
                                 </div>
-                                
                             </div>
+                            <div class="form-row form">
+                                <form>
+                                    <div id="login-nav-form" class="form-group access-form">
+                                        <input class="form-control" type="text" placeholder="password" />
+                                        <input class="form-control" type="text" placeholder="email" />
+                                        <button class="btn btn-sm btn-primary">LogIn</button>
+                                    </div>
+                                </form>
+                                <form>
+                                    <div class="form-group access-form" id="singup-nav-form">
+                                        <input class="form-control" type="text" placeholder="First name" />
+                                        <input class="form-control" type="text" placeholder="Last name" />
+                                        <input class="form-control" type="text" placeholder="Company" />
+                                        <input class="form-control" type="text" placeholder="email" />
+                                        <input class="form-control" type="text" placeholder="password" />
+
+                                        <button class="btn btn-sm btn-primary">SignUp</button>
+                                    </div>
+                                </form>
+                            </div>
+                        
                         </li>
-                    </ul>
+                       </ul>
                 </div>
             </div>
         </nav>
@@ -67,7 +77,6 @@
             &copy; 2020 - TransactionPlatform.WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)

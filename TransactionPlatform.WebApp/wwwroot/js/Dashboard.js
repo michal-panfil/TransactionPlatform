@@ -2,9 +2,8 @@
 let Currentitem;
 let UpdatedInstruments = [];
 
-
-setInterval(GetInstrumentPrices, 2000);
-setTimeout(GetInstrumentPrices, 1000);
+setInterval(GetInstrumentPrices, 10000);
+$(document).ready(GetInstrumentPrices, 1000);
 
 function OpenBuyInstrumentForm() {
     let popup = $('.popup-box');
@@ -42,11 +41,10 @@ function AssingPriceToInstrument(item) {
     let highliteStyle;
     if (currInstPrice.text() > item.price) {
         highliteStyle = "highlightDown";
-    } else if (currInstPrice.text() <= item.price) {
-        highliteStyle = "highlightUp";
-
     }
-
+    else if (currInstPrice.text() <= item.price) {
+        highliteStyle = "highlightUp";
+    }
 
     currInstPrice.text(item.price);
     currInstVolumen.text(item.volumen);

@@ -78,3 +78,21 @@ body {
     transition: background-color 1s ease;
     background-color: orangered;
 }
+#login-nav-form{
+    display: none;
+}
+
+#singup-nav-form {
+    display: none;
+}
+.access-form {
+    position: absolute;
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid azure;
+    background-color:white;
+    z-index:99999;
+}
+.access-form > * {
+    margin-top: 5px;
+}
