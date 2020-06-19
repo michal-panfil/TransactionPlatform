@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model TransactionPlatform.DomainLibrary.Dtos.AuthoUserDto; 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -47,21 +48,21 @@
                                         <button class="btn btn-sm btn-primary">LogIn</button>
                                     </div>
                                 </form>
-                                <form>
+                                <form asp-area="" asp-controller="Autho" asp-action="Register" method="post">
                                     <div class="form-group access-form" id="singup-nav-form">
-                                        <input class="form-control" type="text" placeholder="First name" />
-                                        <input class="form-control" type="text" placeholder="Last name" />
-                                        <input class="form-control" type="text" placeholder="Company" />
-                                        <input class="form-control" type="text" placeholder="email" />
-                                        <input class="form-control" type="text" placeholder="password" />
-
+                                        <input class="form-control" type="text" placeholder="First name" asp-for="User.FirstName" />
+                                        <input class="form-control" type="text" placeholder="Last name" asp-for="User.LastName" />
+                                        <input class="form-control" type="text" placeholder="Company" asp-for="User.Comapny"/>
+                                        <input class="form-control" type="text" placeholder="email" asp-for="UsersAccess.Username"/>
+                                        <input class="form-control" type="text" placeholder="password" asp-for="Passwords"/>
                                         <button class="btn btn-sm btn-primary">SignUp</button>
+                                        
                                     </div>
                                 </form>
                             </div>
-                        
+
                         </li>
-                       </ul>
+                    </ul>
                 </div>
             </div>
         </nav>
