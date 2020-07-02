@@ -10,7 +10,7 @@ namespace TransactionPlatform.WebApp.Controllers
     {
         public async Task<float> Index()
         {
-            var client = new ServiceReference1.Service1Client();
+            var client = new ServiceReference1.TransactionServiceClient ();
      
             var wcfTask = client.GetPriceOfInstrumentAsync(10);
             var x = await  wcfTask;

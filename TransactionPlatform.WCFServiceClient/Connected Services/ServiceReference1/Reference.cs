@@ -21,12 +21,7 @@ namespace TransactionPlatform.WCFServiceClient.ServiceReference1 {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
         System.Threading.Tasks.Task<string> GetDataAsync(int value);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IService1/GetDataUsingDataContractResponse")]
-        TransactionPlatform.TransactionService.CompositeType GetDataUsingDataContract(TransactionPlatform.TransactionService.CompositeType composite);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IService1/GetDataUsingDataContractResponse")]
-        System.Threading.Tasks.Task<TransactionPlatform.TransactionService.CompositeType> GetDataUsingDataContractAsync(TransactionPlatform.TransactionService.CompositeType composite);
-        
+      
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetPriceOfInstrument", ReplyAction="http://tempuri.org/IService1/GetPriceOfInstrumentResponse")]
         float GetPriceOfInstrument(int id);
         
@@ -67,14 +62,6 @@ namespace TransactionPlatform.WCFServiceClient.ServiceReference1 {
         
         public System.Threading.Tasks.Task<string> GetDataAsync(int value) {
             return base.Channel.GetDataAsync(value);
-        }
-        
-        public TransactionPlatform.TransactionService.CompositeType GetDataUsingDataContract(TransactionPlatform.TransactionService.CompositeType composite) {
-            return base.Channel.GetDataUsingDataContract(composite);
-        }
-        
-        public System.Threading.Tasks.Task<TransactionPlatform.TransactionService.CompositeType> GetDataUsingDataContractAsync(TransactionPlatform.TransactionService.CompositeType composite) {
-            return base.Channel.GetDataUsingDataContractAsync(composite);
         }
         
         public float GetPriceOfInstrument(int id) {

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TransactionPlatform.DomainLibrary.Dtos;
 using TransactionPlatform.DomainLibrary.Models;
 
 namespace TransactionPlatform.WebApp.Data
@@ -28,21 +29,19 @@ namespace TransactionPlatform.WebApp.Data
 
         }
 
-        public async Task<User> Register(User user, string password)
+        public  AuthoUserDto Register(AuthoUserDto authUser)
         {
             byte[] passwordHash, passwordSalt;
-            CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            var userAccess = new UsersAccess()
-            {
-                Username = user.Email,
-                PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt,
-            };
-            await context.Users.AddAsync(user);
-            await context.UsersAccesses.AddAsync(userAccess);
+            CreatePasswordHash(authUser.Password, out passwordHash, out passwordSalt);
+
+            authUser.UsersAccess.PasswordHash = passwordHash;
+            authUser.UsersAccess.PasswordSalt = passwordSalt;
+
+             context.Users.Add(authUser.User);
+             context.UsersAccesses.Add(authUser.UsersAccess);
             context.SaveChanges();
 
-            return user;
+            return authUser;
 
         }
         public async Task<UsersAccess> Login(string username, string password)
@@ -79,5 +78,7 @@ namespace TransactionPlatform.WebApp.Data
             }
             return false;
         }
+
+       
     }
 }

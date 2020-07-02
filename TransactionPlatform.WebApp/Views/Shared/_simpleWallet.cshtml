@@ -10,51 +10,38 @@
     <thead class="thead-dark">
         <tr>
             <th scope="row">Ticker</th>
-            <th scope="row">Price</th>
             <th scope="row">Volumen</th>
-            <th scope="row">Profit</th>
+            <th scope="row">Price</th>
+            <th scope="row">Buy Date</th>
             <th scope="row">Action</th>
         </tr>
     </thead>
     <tbody>
-        <!--
-       //@foreach (var asset in Model.UserWallet.Assets)
-    {
-        <tr>
-            <td>AUT</td>
-            <td>93 00</td>
-            <td>640</td>
+        @if (Model.UserWallet?.Assets.Count == 0)
+        {
+            <tr><td colspan="5">No assets in your Wallet. You can buy it!</td></tr>
+        }
+        else
+        {
 
-            <td><button class="btn btn-danger">Sell</button></td>
+            @foreach (var asset in Model.UserWallet?.Assets)
+            {
+                <tr>
+                    <td>@asset.Name</td>
+                    <td>@asset.Volumen</td>
+                    <td>@asset.BuyPrice</td>
+                    <td>@asset.BuyDT</td>
+                    
+                    <td><button class="btn btn-danger">Sell</button></td>
+                </tr>
 
-        </tr>
-    }
-    -->
-        <tr>
-        <td>Oil</td>
-        <td>24 600</td>
-        <td>250</td>
-        <td>5%</td>
 
-        <td><button class="btn btn-danger">Sell</button></td>
-    </tr>
-        <tr>
-            <td>AUT</td>
-            <td>93 00</td>
-            <td>640</td>
-            <td>5%</td>
+            }
+        }
 
-            <td><button class="btn btn-danger">Sell</button></td>
 
-        </tr>
-        <tr>
-            <td>PLN</td>
-            <td>42 300</td>
-            <td>1000</td>
-            <td>5%</td>
 
-            <td><button class="btn btn-danger">Sell</button></td>
 
-        </tr>
+
     </tbody>
 </table>

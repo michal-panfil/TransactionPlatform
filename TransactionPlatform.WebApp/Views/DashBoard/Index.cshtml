@@ -9,11 +9,10 @@
                 <tbody>
                     <tr>
                         <td>Avalible Cash:</td>
-                        <td>$ @Model.UserWallet.Cash </td>
-                        <td>Estimated assets:</td>
-                        <td>$ @Model.UserWallet.EstimatedValue</td>
-                        <td>ROI:</td>
-                        <td>@Model.UserWallet.ROI %</td>
+                        <td>$ @Model.UserWallet.CirculatingMedium.AvailableAmount </td>
+                        <td>Blocked cash: </td>
+                        <td>$ @Model.UserWallet.CirculatingMedium.BlockedAmount</td>
+                        
                     </tr>
                 </tbody>
             </table>

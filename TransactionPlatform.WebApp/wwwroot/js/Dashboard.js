@@ -5,17 +5,42 @@ let UpdatedInstruments = [];
 setInterval(GetInstrumentPrices, 10000);
 $(document).ready(GetInstrumentPrices, 1000);
 
-function OpenBuyInstrumentForm() {
+function OpenBuyInstrumentForm(name, identificator) {
     let popup = $('.popup-box');
     popup.toggle();
+    let ticker = $('#buyTicker');
+    let price = $('#buyPrice');
+    let x = '#' + identificator;
+    let instrumentprice = $(x).find('.instrument-price-item').text();
+    ticker.val(name);
+    price.val(instrumentprice);
+
 }
 function CancelBuyInstrumentForm() {
     let popup = $('.popup-box');
     popup.toggle();
 }
-function SentTransactionRequest() {
+function SentBuyRequest() {
     let popup = $('.popup-box');
+  
+    let tic = $('#buyTicker').val();
+    let prc = $('#buyPrice').val();
+    let vol = $('#buyVolumen').val();
+        
+    
     popup.toggle();
+    $.ajax({
+        type: "POST",
+        url: "TransactionService/BuyInstrument",
+        data: { ticker: tic, price: prc, volumen: vol },
+        dataType: "text",
+        success: function (response) {
+            console.log("response : ")
+            console.dir(response)
+            response.forEach(AssingPriceToInstrument);
+        },
+        error: function () { console.log("error") }
+    })
     $('.container').append('<div class="popup-box request-succes"><h3>Request has been sent</h3></div>');
     setTimeout(function () { $('.request-succes').remove(); }, 2000); 
     

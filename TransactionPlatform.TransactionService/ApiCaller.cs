@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using TransactionPlatform.DomainLibrary.Dtos;
 using TransactionPlatform.DomainLibrary.Models;
+using TransactionPlatform.DomainLibrary.Models.WalletModels;
 
 namespace TransactionPlatform.TransactionService
 {
@@ -16,15 +17,40 @@ namespace TransactionPlatform.TransactionService
         public string SufixUri { get; set; }
 
 
+        public Wallet GetWalletByUserId(string userId)
+        {
+            SufixUri = @"UsersWallet/GetWallet/{" + userId + "}";
+            var apiResponse = CallApi().Result;
+
+            var wallet = JsonConvert.DeserializeObject<Wallet>(apiResponse);
+            return wallet;
+        }
         public List<Instrument> GetAllInstruments()
         {
-            SufixUri = "Instrument";
-            var apiRespone = CallApi().Result;
+            SufixUri = "Instrument/GetInstruments";
+            var apiResponse = CallApi().Result;
 
-            var instruments = JsonConvert.DeserializeObject < List<Instrument>>(apiRespone);
+            var instruments = JsonConvert.DeserializeObject < List<Instrument>>(apiResponse);
             return instruments;
         }
 
+        internal object ChargeWallet(TransactionFormDto transactionDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal object AddAssetToWallet(TransactionFormDto transactionDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Instrument GetInstrumentByTicker(string ticker)
+        {
+            SufixUri = @"Instrument/{" + ticker + "}";
+            var apiResponse = CallApi().Result;
+            var instrument = JsonConvert.DeserializeObject<Instrument>(apiResponse);
+            return instrument;
+        }
         private async Task<string> CallApi()
         {
             using (var httpClient = new HttpClient())

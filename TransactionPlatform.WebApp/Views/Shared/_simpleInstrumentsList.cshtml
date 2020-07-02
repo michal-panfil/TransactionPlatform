@@ -22,67 +22,10 @@
             <tr id=@identificator data-toggle="tooltip" title= "@instrument.Description">
                 <td>@instrument.Ticker</td>
                 <td>@instrument.Name</td>
-                <td class="instrument-price-item"> ajax</td>
+                <td class="instrument-price-item" > ajax</td>
                 <td class="instrument-volumen-item"> ajax</td>
-                <td><button class="btn btn-success" onclick="OpenBuyInstrumentForm()">buy</button></td>
+                <td><button class="btn btn-success" onclick="OpenBuyInstrumentForm('@instrument.Ticker', '@identificator')">buy</button></td>
             </tr>
         }
-        <!--<tr>
-                <td>OBR</td>
-                <td>Oil Brand</td>
-                <td>$32</td>
-                <td>$500343</td>
-                <td><button class="btn btn-success">buy</button></td>
-            </tr>
-            <tr>
-                <td>CAU</td>
-                <td>Coal Australian</td>
-                <td>$745</td>
-                <td>$6548652</td>
-                <td><button class="btn btn-success">buy</button></td>
-            </tr>
-            <tr>
-                <td>RCH</td>
-                <td>Rice Chinis</td>
-                <td>$325</td>
-                <td>32343</td>
-                <td><button class="btn btn-success">buy</button></td>
-            </tr>
-            <tr>
-                <td>OND</td>
-                <td>Oil North See</td>
-                <td>$39</td>
-                <td>$1500343</td>
-                <td><button class="btn btn-success">buy</button></td>
-            </tr>
-            <tr>
-                <td>OBR</td>
-                <td>Oil Brand</td>
-                <td>$32</td>
-                <td>$500343</td>
-                <td><button class="btn btn-success">buy</button></td>
-            </tr>
-            <tr>
-                <td>CAU</td>
-                <td>Coal Australian</td>
-                <td>$745</td>
-                <td>$6548652</td>
-                <td><button class="btn btn-success">buy</button></td>
-            </tr>
-            <tr>
-                <td>RCH</td>
-                <td>Rice Chinis</td>
-                <td>$325</td>
-                <td>32343</td>
-                <td><button class="btn btn-success">buy</button></td>
-            </tr>
-            <tr>
-                <td>OND</td>
-                <td>Oil North See</td>
-                <td>$39</td>
-                <td>$1500343</td>
-                <td><button class="btn btn-success">buy</button></td>
-            </tr>
-    -->
     </tbody>
 </table>

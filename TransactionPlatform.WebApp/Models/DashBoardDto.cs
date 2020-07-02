@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TransactionPlatform.DomainLibrary.Models;
+using TransactionPlatform.DomainLibrary.Models.WalletModels;
 
 namespace TransactionPlatform.WebApp.Models
 {

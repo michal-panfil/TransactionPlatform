@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TransactionPlatform.DomainLibrary.Models;
 using TransactionPlatform.DomainLibrary.Dtos;
+using TransactionPlatform.DomainLibrary.Models.WalletModels;
+using Microsoft.EntityFrameworkCore;
+using TransactionPlatform.API.Data;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
 
 namespace TransactionPlatform.API.Controllers
 {
@@ -13,28 +18,63 @@ namespace TransactionPlatform.API.Controllers
     [ApiController]
     public class UsersWalletController : ControllerBase
     {
-        [HttpGet]
-        public Wallet Get(int id)
+        private readonly ApiDbContext context;
+        private readonly IWalletRepo repo;
+
+        public UsersWalletController(ApiDbContext context)
         {
-            var assets = new List<AssetDto>
+            this.context = context;
+            repo = new BaseWalletRepo(context);
+
+        }
+        [HttpGet]
+        [Route("[action]")]
+        public IActionResult GetWallet(string id)
+        {
+            var result = repo.GetWalletByUserId(id);
+
+            return Ok(JsonConvert.SerializeObject(result, Formatting.Indented));
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public Wallet AddWallet(Wallet wallet)
+        {
+            var result = repo.AddWallet(wallet);
+
+            return result;
+        }
+
+
+        [HttpPost]
+        [Route("[action]")]
+        public bool ChargeWallet(TransactionFormDto transaction)
+        {
+            var price = transaction.Price * transaction.Volumen;
+            var result = repo.ChargeWallet(transaction.UserId, price);
+
+            return result;
+        }
+
+
+        [HttpPost]
+        [Route("[action]")]
+
+        public bool AddAssetToWallet(TransactionFormDto transaction)
+        {
+
+            var asset = new BaseAsset()
             {
-                new AssetDto{ Id = 1, Ticker = "OB3", Name="Oli Brand 3" , InitialPrice =27M, Volumen = 500},
-                new AssetDto{ Id = 1, Ticker = "API", Name="Avreage Price Contract" , InitialPrice =721M, Volumen = 77},
-                new AssetDto{ Id = 1, Ticker = "WTF", Name="World Train Federation" , InitialPrice =2.63M, Volumen = 2500}
+                InstrumentId = context.Instruments.Where(i => i.Ticker == transaction.Ticker).FirstOrDefault().Id,
+                Name = transaction.Ticker,
+                BuyPrice = (decimal)transaction.Price,
+                Volumen = transaction.Volumen,
+                BuyDT = transaction.TransactionTime,
+                SaleDT = null,
             };
+            var result = repo.AddAssetToWallet(transaction.UserId, asset);
 
-            // have to create WalletDto
-            var wallet = new Wallet()
-            {
-                Id = 1,
-                OwnerId = 1,
-                Cash = 15324M,
-                Assets = assets,
-                SumInvestedMoney = 70345M
-            };
-
-
-            return wallet;
+            return false;
         }
 
     }

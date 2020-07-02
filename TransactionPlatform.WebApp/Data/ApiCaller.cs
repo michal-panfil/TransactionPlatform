@@ -2,10 +2,13 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using TransactionPlatform.DomainLibrary.Models;
+using TransactionPlatform.DomainLibrary.Models.WalletModels;
 
 namespace TransactionPlatform.WebApp.Data
 {
@@ -16,37 +19,75 @@ namespace TransactionPlatform.WebApp.Data
 
        
 
-        public async Task<string> CallApi()
+        private async Task<string> CallApiGet(string sufix)
         {
             string result;
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync(BaseUri + SufixUri)) {
+                using (var response = await httpClient.GetAsync(BaseUri + sufix)) {
                      result = await response.Content.ReadAsStringAsync();
                 } ;
             }
             return result;
         }
+        private async Task<string> CallApiPost(HttpContent contnet)
+        {
+            string result;
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.PostAsync(BaseUri + SufixUri, contnet)) 
+                {
+                    result = await response.Content.ReadAsStringAsync();
+                };
+            }
+            return result;
+        }
         public async Task<List<Instrument>> GetInstrumentsFromAPI()
         {
-            SufixUri = $"Instrument";
+            //SufixUri = $"Instrument";
+            var sufixUri = $"Instrument/GetInstruments";
 
-            var apiTasks = CallApi();
+            var apiTasks = CallApiGet(sufixUri);
             var apiResponse = await apiTasks;
             var instruments = JsonConvert.DeserializeObject<List<Instrument>>(apiResponse);
 
             return instruments;
         }
-
-        public async Task<Wallet> GetWalletFromAPI(int userId)
+         
+        public async Task<Wallet> GetWalletFromAPI(string userId)
         {
-            SufixUri = $"UsersWallet?id={userId}";
+            //SufixUri = $"UsersWallet/GetWallet?Id=" + userId;
+            var sufixUri = $"UsersWallet/GetWallet?Id=" + userId;
 
-            var apiTasks = CallApi();
+
+            var apiTasks = CallApiGet(sufixUri);
             var apiResponse = await apiTasks;
-            var wallet = JsonConvert.DeserializeObject<Wallet>(apiResponse);
+            var settings = new JsonSerializerSettings
+            {
+                MaxDepth = 99,
+                ReferenceLoopHandling = ReferenceLoopHandling.Error
+            };
+            var wallet = JsonConvert.DeserializeObject<Wallet>(apiResponse, settings);
 
             return wallet;
+        }
+
+        public async Task<Wallet> CreateWallet(Wallet wallet)
+        {
+            SufixUri = $"UsersWallet/AddWallet";
+            var json = new JsonTextWriter(new StringWriter(new StringBuilder()));
+            var textW = new StringWriter(new StringBuilder());
+            var x = new JsonSerializer();
+            x.Serialize(textW, wallet);
+
+            var content = new StringContent(textW.ToString(), Encoding.UTF8, "application/json");
+
+
+            var apiTasks = CallApiPost(content);
+            var apiResponse = await apiTasks;
+            var resultWallet = JsonConvert.DeserializeObject<Wallet>(apiResponse);
+
+            return resultWallet;
         }
     }
 

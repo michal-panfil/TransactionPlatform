@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TransactionPlatform.DomainLibrary.Models;
+using TransactionPlatform.DomainLibrary.Models.WalletModels;
 using TransactionPlatform.WebApp.Models;
 
 namespace TransactionPlatform.WebApp.Data
@@ -23,14 +24,14 @@ namespace TransactionPlatform.WebApp.Data
 
             };*/
 
-            dashboard.UserWallet = new Wallet()
+        /*    dashboard.UserWallet = new StandardWallet()
             {
                 Id = 1,
                 OwnerId = 1,
                 Cash = 13400,
                 SumInvestedMoney= 50000,
                // Assets = assets,
-            };
+            };*/
             /*
             dashboard.Instruments.Add(new Instrument() {Id = 1, Name = "Oil Barnd 3", Ticker= "OB3", Description ="The clearest and moste value cartify oil"}); 
             dashboard.Instruments.Add(new Instrument() {Id = 2, Name = "Corn US", Ticker= "CUS", Description ="Corn from midlle of USA wigh quality"}); 

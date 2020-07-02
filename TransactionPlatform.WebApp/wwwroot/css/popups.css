@@ -10,7 +10,7 @@
     height: auto;
     background-color: aliceblue;
     z-index: 9999;
-    padding : 40px;
+    padding : 20px;
     border: 1px solid grey;
     box-shadow: grey 7px 7px 5px;
 }

@@ -9,69 +9,34 @@
 
 namespace ServiceReference1
 {
-    using System.Runtime.Serialization;
     
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CompositeType", Namespace="http://schemas.datacontract.org/2004/07/TransactionPlatform.TransactionService")]
-    public partial class CompositeType : object
-    {
-        
-        private bool BoolValueField;
-        
-        private string StringValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool BoolValue
-        {
-            get
-            {
-                return this.BoolValueField;
-            }
-            set
-            {
-                this.BoolValueField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string StringValue
-        {
-            get
-            {
-                return this.StringValueField;
-            }
-            set
-            {
-                this.StringValueField = value;
-            }
-        }
-    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference1.IService1")]
-    public interface IService1
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference1.ITransactionService")]
+    public interface ITransactionService
     {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetData", ReplyAction="http://tempuri.org/IService1/GetDataResponse")]
-        System.Threading.Tasks.Task<string> GetDataAsync(int value);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetDataUsingDataContract", ReplyAction="http://tempuri.org/IService1/GetDataUsingDataContractResponse")]
-        System.Threading.Tasks.Task<ServiceReference1.CompositeType> GetDataUsingDataContractAsync(ServiceReference1.CompositeType composite);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService1/GetPriceOfInstrument", ReplyAction="http://tempuri.org/IService1/GetPriceOfInstrumentResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITransactionService/GetPriceOfInstrument", ReplyAction="http://tempuri.org/ITransactionService/GetPriceOfInstrumentResponse")]
         System.Threading.Tasks.Task<float> GetPriceOfInstrumentAsync(int id);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITransactionService/GetPriceOfAllInstruments", ReplyAction="http://tempuri.org/ITransactionService/GetPriceOfAllInstrumentsResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto>> GetPriceOfAllInstrumentsAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITransactionService/GetPriceOfAllInstrumentsAsync", ReplyAction="http://tempuri.org/ITransactionService/GetPriceOfAllInstrumentsAsyncResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto>> GetPriceOfAllInstrumentsAsyncAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITransactionService/AcceptTransaction", ReplyAction="http://tempuri.org/ITransactionService/AcceptTransactionResponse")]
+        System.Threading.Tasks.Task<bool> AcceptTransactionAsync(TransactionPlatform.DomainLibrary.Dtos.TransactionFormDto transactionDto);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    public interface IService1Channel : ServiceReference1.IService1, System.ServiceModel.IClientChannel
+    public interface ITransactionServiceChannel : ServiceReference1.ITransactionService, System.ServiceModel.IClientChannel
     {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    public partial class Service1Client : System.ServiceModel.ClientBase<ServiceReference1.IService1>, ServiceReference1.IService1
+    public partial class TransactionServiceClient : System.ServiceModel.ClientBase<ServiceReference1.ITransactionService>, ServiceReference1.ITransactionService
     {
         
         /// <summary>
@@ -81,52 +46,57 @@ namespace ServiceReference1
         /// <param name="clientCredentials">The client credentials</param>
         static partial void ConfigureEndpoint(System.ServiceModel.Description.ServiceEndpoint serviceEndpoint, System.ServiceModel.Description.ClientCredentials clientCredentials);
         
-        public Service1Client() : 
-                base(Service1Client.GetDefaultBinding(), Service1Client.GetDefaultEndpointAddress())
+        public TransactionServiceClient() : 
+                base(TransactionServiceClient.GetDefaultBinding(), TransactionServiceClient.GetDefaultEndpointAddress())
         {
-            this.Endpoint.Name = EndpointConfiguration.BasicHttpBinding_IService1.ToString();
+            this.Endpoint.Name = EndpointConfiguration.BasicHttpBinding_ITransactionService.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public Service1Client(EndpointConfiguration endpointConfiguration) : 
-                base(Service1Client.GetBindingForEndpoint(endpointConfiguration), Service1Client.GetEndpointAddress(endpointConfiguration))
-        {
-            this.Endpoint.Name = endpointConfiguration.ToString();
-            ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
-        }
-        
-        public Service1Client(EndpointConfiguration endpointConfiguration, string remoteAddress) : 
-                base(Service1Client.GetBindingForEndpoint(endpointConfiguration), new System.ServiceModel.EndpointAddress(remoteAddress))
+        public TransactionServiceClient(EndpointConfiguration endpointConfiguration) : 
+                base(TransactionServiceClient.GetBindingForEndpoint(endpointConfiguration), TransactionServiceClient.GetEndpointAddress(endpointConfiguration))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public Service1Client(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(Service1Client.GetBindingForEndpoint(endpointConfiguration), remoteAddress)
+        public TransactionServiceClient(EndpointConfiguration endpointConfiguration, string remoteAddress) : 
+                base(TransactionServiceClient.GetBindingForEndpoint(endpointConfiguration), new System.ServiceModel.EndpointAddress(remoteAddress))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public Service1Client(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public TransactionServiceClient(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(TransactionServiceClient.GetBindingForEndpoint(endpointConfiguration), remoteAddress)
+        {
+            this.Endpoint.Name = endpointConfiguration.ToString();
+            ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
+        }
+        
+        public TransactionServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress)
         {
-        }
-        
-        public System.Threading.Tasks.Task<string> GetDataAsync(int value)
-        {
-            return base.Channel.GetDataAsync(value);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceReference1.CompositeType> GetDataUsingDataContractAsync(ServiceReference1.CompositeType composite)
-        {
-            return base.Channel.GetDataUsingDataContractAsync(composite);
         }
         
         public System.Threading.Tasks.Task<float> GetPriceOfInstrumentAsync(int id)
         {
             return base.Channel.GetPriceOfInstrumentAsync(id);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto>> GetPriceOfAllInstrumentsAsync()
+        {
+            return base.Channel.GetPriceOfAllInstrumentsAsync();
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto>> GetPriceOfAllInstrumentsAsyncAsync()
+        {
+            return base.Channel.GetPriceOfAllInstrumentsAsyncAsync();
+        }
+        
+        public System.Threading.Tasks.Task<bool> AcceptTransactionAsync(TransactionPlatform.DomainLibrary.Dtos.TransactionFormDto transactionDto)
+        {
+            return base.Channel.AcceptTransactionAsync(transactionDto);
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()
@@ -141,7 +111,7 @@ namespace ServiceReference1
         
         private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {
-            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IService1))
+            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_ITransactionService))
             {
                 System.ServiceModel.BasicHttpBinding result = new System.ServiceModel.BasicHttpBinding();
                 result.MaxBufferSize = int.MaxValue;
@@ -155,27 +125,27 @@ namespace ServiceReference1
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
         {
-            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IService1))
+            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_ITransactionService))
             {
-                return new System.ServiceModel.EndpointAddress("http://localhost:55365/Service1.svc");
+                return new System.ServiceModel.EndpointAddress("http://localhost:55365/TransactionService.svc");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
         
         private static System.ServiceModel.Channels.Binding GetDefaultBinding()
         {
-            return Service1Client.GetBindingForEndpoint(EndpointConfiguration.BasicHttpBinding_IService1);
+            return TransactionServiceClient.GetBindingForEndpoint(EndpointConfiguration.BasicHttpBinding_ITransactionService);
         }
         
         private static System.ServiceModel.EndpointAddress GetDefaultEndpointAddress()
         {
-            return Service1Client.GetEndpointAddress(EndpointConfiguration.BasicHttpBinding_IService1);
+            return TransactionServiceClient.GetEndpointAddress(EndpointConfiguration.BasicHttpBinding_ITransactionService);
         }
         
         public enum EndpointConfiguration
         {
             
-            BasicHttpBinding_IService1,
+            BasicHttpBinding_ITransactionService,
         }
     }
 }
