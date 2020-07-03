@@ -20,7 +20,7 @@ function CancelBuyInstrumentForm() {
     let popup = $('.popup-box');
     popup.toggle();
 }
-function SentBuyRequest() {
+function SentTransactionRequest () {
     let popup = $('.popup-box');
   
     let tic = $('#buyTicker').val();

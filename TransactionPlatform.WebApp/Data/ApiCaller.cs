@@ -15,10 +15,7 @@ namespace TransactionPlatform.WebApp.Data
     public class ApiCaller
     {
         public string BaseUri { get; set; } = $"http://localhost:54868/api/";
-        public string SufixUri { get; set; } 
-
-       
-
+ 
         private async Task<string> CallApiGet(string sufix)
         {
             string result;
@@ -30,12 +27,12 @@ namespace TransactionPlatform.WebApp.Data
             }
             return result;
         }
-        private async Task<string> CallApiPost(HttpContent contnet)
+        private async Task<string> CallApiPost(string sufixUri, HttpContent contnet)
         {
             string result;
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.PostAsync(BaseUri + SufixUri, contnet)) 
+                using (var response = await httpClient.PostAsync(BaseUri + sufixUri, contnet)) 
                 {
                     result = await response.Content.ReadAsStringAsync();
                 };
@@ -44,7 +41,7 @@ namespace TransactionPlatform.WebApp.Data
         }
         public async Task<List<Instrument>> GetInstrumentsFromAPI()
         {
-            //SufixUri = $"Instrument";
+          
             var sufixUri = $"Instrument/GetInstruments";
 
             var apiTasks = CallApiGet(sufixUri);
@@ -74,7 +71,7 @@ namespace TransactionPlatform.WebApp.Data
 
         public async Task<Wallet> CreateWallet(Wallet wallet)
         {
-            SufixUri = $"UsersWallet/AddWallet";
+            var sufixUri = $"UsersWallet/AddWallet";
             var json = new JsonTextWriter(new StringWriter(new StringBuilder()));
             var textW = new StringWriter(new StringBuilder());
             var x = new JsonSerializer();
@@ -83,7 +80,7 @@ namespace TransactionPlatform.WebApp.Data
             var content = new StringContent(textW.ToString(), Encoding.UTF8, "application/json");
 
 
-            var apiTasks = CallApiPost(content);
+            var apiTasks = CallApiPost(sufixUri, content);
             var apiResponse = await apiTasks;
             var resultWallet = JsonConvert.DeserializeObject<Wallet>(apiResponse);
 

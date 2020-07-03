@@ -31,7 +31,11 @@ namespace TransactionPlatform.TransactionService
 			{
 				//var instrument = api.GetInstrumentByTicker(transactionDto.Ticker);
 				var charged = api.ChargeWallet(transactionDto);
-				var x = api.AddAssetToWallet(transactionDto);
+				if (charged.Equals("True"))
+				{
+					var x = api.AddAssetToWallet(transactionDto);
+
+				}
 
 			}
 			catch (Exception)
@@ -61,21 +65,21 @@ namespace TransactionPlatform.TransactionService
 			return priceList;
 		}
 
-		public List<InstrumentPriceDto> GetPriceOfAllInstrumentsAsync()
-		{
+			public List<InstrumentPriceDto> GetPriceOfAllInstrumentsAsync()
+				{
 
-			var priceList = new List<InstrumentPriceDto>();
-			
-			var api = new ApiCaller();
-			var instruments = api.GetAllInstruments();
+					var priceList = new List<InstrumentPriceDto>();
 
-			foreach (var instrument in instruments)
-			{
-				priceList.Add(new InstrumentPriceDto { Id = instrument.Id, Price = instrument.Id + 100, PriceDate = DateTime.UtcNow });
-			}
+					var api = new ApiCaller();
+					var instruments = api.GetAllInstruments();
 
-			return priceList;
-		}
+					foreach (var instrument in instruments)
+					{
+						priceList.Add(new InstrumentPriceDto { Id = instrument.Id, Price = instrument.Id + 100, PriceDate = DateTime.UtcNow });
+					}
+
+					return priceList;
+				}
 
 		public float GetPriceOfInstrument(int id)
 		{

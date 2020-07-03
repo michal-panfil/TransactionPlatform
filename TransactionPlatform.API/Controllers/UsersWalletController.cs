@@ -48,12 +48,12 @@ namespace TransactionPlatform.API.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public bool ChargeWallet(TransactionFormDto transaction)
+        public string ChargeWallet(TransactionFormDto transaction)
         {
             var price = transaction.Price * transaction.Volumen;
             var result = repo.ChargeWallet(transaction.UserId, price);
 
-            return result;
+            return result.ToString();
         }
 
 
