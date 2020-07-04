@@ -48,10 +48,11 @@ namespace TransactionPlatform.API.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public string ChargeWallet(TransactionFormDto transaction)
+        public string ChargeCreditWallt(ChargeWalletDto dto)
         {
-            var price = transaction.Price * transaction.Volumen;
-            var result = repo.ChargeWallet(transaction.UserId, price);
+
+
+            var result = repo.ChargeWallet(dto.UserId, dto.Amount);
 
             return result.ToString();
         }
@@ -73,6 +74,25 @@ namespace TransactionPlatform.API.Controllers
                 SaleDT = null,
             };
             var result = repo.AddAssetToWallet(transaction.UserId, asset);
+
+            return false;
+        }
+        [HttpPost]
+        [Route("[action]")]
+
+        public bool RemoveAssetFromWallet(TransactionFormDto transaction)
+        {
+
+            var asset = new BaseAsset()
+            {
+                InstrumentId = context.Instruments.Where(i => i.Ticker == transaction.Ticker).FirstOrDefault().Id,
+                Name = transaction.Ticker,
+                BuyPrice = (decimal)transaction.Price,
+                Volumen = transaction.Volumen,
+                BuyDT = transaction.TransactionTime,
+                SaleDT = null,
+            };
+            var result = repo.RemoveAssetFromWallet(transaction.UserId, asset);
 
             return false;
         }

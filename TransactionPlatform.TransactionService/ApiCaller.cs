@@ -35,30 +35,43 @@ namespace TransactionPlatform.TransactionService
             return instruments;
         }
 
-        internal string ChargeWallet(TransactionFormDto transactionDto)
+        internal object BuyAsset(TransactionFormDto transactionDto)
         {
-            var sufixUri = @"UsersWallet/ChargeWallet";
+            throw new NotImplementedException();
+        }
+
+        internal object SellAsset(TransactionFormDto transactionDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ChargeWallet(TransactionFormDto transactionDto)
+        {
+            var sufixUri = @"UsersWallet/ChargeCreditWallt";
             var json = new JsonTextWriter(new StringWriter(new StringBuilder()));
             var textW = new StringWriter(new StringBuilder());
-            var x = new JsonSerializer();
-            x.Serialize(textW, transactionDto);
+            var jsonSerrializer = new JsonSerializer();
+
+            var transactionPrice = transactionDto.TransType == TransactionType.Buy ? transactionDto.Price * transactionDto.Volumen : transactionDto.Price * transactionDto.Volumen * (-1);
+
+            var transactionData = new ChargeWalletDto{ UserId = transactionDto.UserId, Amount = (decimal)transactionPrice };
+
+
+            jsonSerrializer.Serialize(textW, transactionData);
 
             var content = new StringContent(textW.ToString(), Encoding.UTF8, "application/json");
 
-
             var response =  CallApiPost(sufixUri, content).Result;
-            
 
             return response;
-            
-            //
-
 
         }
+        
 
-        internal object AddAssetToWallet(TransactionFormDto transactionDto)
+        internal string MoveAsset(TransactionFormDto transactionDto)
         {
-            var sufixUri = @"UsersWallet/AddAssetToWallet";
+            var sufixUri = transactionDto.TransType == TransactionType.Buy ?  @"UsersWallet/AddAssetToWallet" : @"UsersWallet/RemoveAssetFromWallet";
+        
             var json = new JsonTextWriter(new StringWriter(new StringBuilder()));
             var textW = new StringWriter(new StringBuilder());
             var x = new JsonSerializer();
@@ -70,7 +83,7 @@ namespace TransactionPlatform.TransactionService
             var response = CallApiPost(sufixUri, content).Result;
 
 
-            return response;
+            return response; 
 
         }
 

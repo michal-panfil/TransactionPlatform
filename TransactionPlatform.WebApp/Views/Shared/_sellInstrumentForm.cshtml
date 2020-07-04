@@ -1,26 +1,27 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-    <div class="popup-box">
+    <div class="popup-box popup-sell">
         <h4 class="text-center"> Sell instrument: </h4>
 
         <div class="form-group">
             <label>Ticker</label>
-            <input class="form-control" type="text" />
+            <input type="text" class="form-control" id="sellTicker" />
+
         </div>
 
         <div class="form-group">
             <label>Price</label>
-            <input type="text" class="form-control"/>
+            <input type="number" step="0.1" class="form-control" id="sellPrice" />
         </div>
 
         <div class="form-group">
             <label>Voumen</label>
-            <input type="text" class="form-control"/>
+            <input type="number" class="form-control" id="sellVolumen" />
         </div>
-        
+
         <div class="form-group">
-            <button class="btn btn-danger" onclick=SentTransactionRequest()>Sell</button>
-            <button class="btn btn-warning"onclick=CancelBuyInstrumentForm()>Cancel</button>
-        </div>        
+            <button class="btn btn-danger" onclick=SendSellTransactionRequest()>Sell</button>
+            <button class="btn btn-warning" onclick=CancelSellInstrumentForm()>Cancel</button>
+        </div>
     </div>

@@ -15,36 +15,11 @@ namespace TransactionPlatform.TransactionService
 	{
 		public bool AcceptTransaction(TransactionFormDto transactionDto)
 		{
-			//PLAN:
-			//1. Get instrument info frome API based on Ticker
-			//2. Get Wallet infl from Api
-			//3. Call Api and block amont on wallt
-			//4. Add transaction to queue
-
-			// Temprorary 4. call api and add Asset to wallet
-
-
-
 			var api = new ApiCaller();
 
-			try
-			{
-				//var instrument = api.GetInstrumentByTicker(transactionDto.Ticker);
-				var charged = api.ChargeWallet(transactionDto);
-				if (charged.Equals("True"))
-				{
-					var x = api.AddAssetToWallet(transactionDto);
-
-				}
-
-			}
-			catch (Exception)
-			{
-
-				return false;
-			}
+			var charged = api.ChargeWallet(transactionDto);
 			
-
+				var x = api.MoveAsset(transactionDto);
 
 			return true;
 		}

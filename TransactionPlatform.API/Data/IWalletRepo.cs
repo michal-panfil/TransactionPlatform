@@ -10,7 +10,8 @@ namespace TransactionPlatform.API.Data
     {
         Wallet GetWalletByUserId(string id);
         Wallet AddWallet(Wallet wallet);
-        bool ChargeWallet(string userId, float price);
+        bool ChargeWallet(string userId, decimal price);
         bool AddAssetToWallet(string userId, BaseAsset asset);
+        object RemoveAssetFromWallet(string userId, BaseAsset asset);
     }
 }

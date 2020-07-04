@@ -36,15 +36,29 @@ namespace TransactionPlatform.API.Data
             return wallet; 
         }
 
-        public bool ChargeWallet(string userId, float price)
+        public bool ChargeWallet(string userId, decimal price)
         {
             var wallet = Context.Wallets.Where(w => w.UserId == userId).Include(w => w.CirculatingMedium).SingleOrDefault();
-            if(wallet.CirculatingMedium.AvailableAmount > (decimal)price)
+            
+            if(price > 0)
             {
-                wallet.CirculatingMedium.AvailableAmount -= (decimal)price;
+                if (wallet.CirculatingMedium.AvailableAmount > price)
+                {
+                    wallet.CirculatingMedium.AvailableAmount -= price;
+                    Context.SaveChanges();
+                    return true;
+                }
+
+            }
+            else
+            {
+                //
+                wallet.CirculatingMedium.AvailableAmount -= price;
                 Context.SaveChanges();
                 return true;
             }
+            
+            
 
             return false;
 
@@ -57,6 +71,15 @@ namespace TransactionPlatform.API.Data
            // wallet.Assets = Context.Assets.Where(a => a.StandardWalletId == wallet.Id).ToList();
           
             return wallet;
+        }
+
+        public object RemoveAssetFromWallet(string userId, BaseAsset asset)
+        {
+            var wallet = Context.Wallets.Where(w => w.UserId == userId).Include(w => w.Assets).SingleOrDefault();
+            var assetToRemove = wallet.Assets.Where(a => a.Name.Equals(asset.Name)).FirstOrDefault(); ;
+            wallet.Assets.Remove(assetToRemove);
+            Context.SaveChanges();
+            return true;
         }
     }
 }

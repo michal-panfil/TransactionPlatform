@@ -6,8 +6,9 @@ setInterval(GetInstrumentPrices, 10000);
 $(document).ready(GetInstrumentPrices, 1000);
 
 function OpenBuyInstrumentForm(name, identificator) {
-    let popup = $('.popup-box');
+    let popup = $('.popup-box.popup-buy');
     popup.toggle();
+
     let ticker = $('#buyTicker');
     let price = $('#buyPrice');
     let x = '#' + identificator;
@@ -16,17 +17,27 @@ function OpenBuyInstrumentForm(name, identificator) {
     price.val(instrumentprice);
 
 }
+function OpenSellInstrumentForm(name, price, volumen) {
+    let popup = $('.popup-box.popup-sell');
+    popup.toggle();
+
+    $('#sellTicker').val(name);
+    $('#sellTicker').text(name);
+    $('#sellPrice').val(price);
+    $('#sellPrice').text(price);
+    $('#sellVolumen').val(volumen);
+    $('#sellVolumen').text(volumen);
+}
 function CancelBuyInstrumentForm() {
-    let popup = $('.popup-box');
+    let popup = $('.popup-box.popup-buy');
     popup.toggle();
 }
-function SentTransactionRequest () {
-    let popup = $('.popup-box');
+function SendBuyTransactionRequest () {
+    let popup = $('.popup-box.popup-buy');
   
     let tic = $('#buyTicker').val();
     let prc = $('#buyPrice').val();
     let vol = $('#buyVolumen').val();
-        
     
     popup.toggle();
     $.ajax({
@@ -45,6 +56,30 @@ function SentTransactionRequest () {
     setTimeout(function () { $('.request-succes').remove(); }, 2000); 
     
 }
+function SendSellTransactionRequest() {
+    let popup = $('.popup-box.popup-sell');
+
+    let tic = $('#sellTicker').val();
+    let prc = $('#sellPrice').val();
+    let vol = $('#sellVolumen').val();
+
+    popup.toggle();
+    $.ajax({
+        type: "POST",
+        url: "TransactionService/SellInstrument",
+        data: { ticker: tic, price: prc, volumen: vol },
+        dataType: "text",
+        success: function (response) {
+            console.log("response : ")
+            console.dir(response)
+        },
+        error: function () { console.log("error") }
+    })
+    $('.container').append('<div class="popup-box request-succes"><h3>Request has been sent</h3></div>');
+    setTimeout(function () { $('.request-succes').remove(); }, 2000);
+
+}
+
 
 function GetInstrumentPrices() {
     $.ajax({
