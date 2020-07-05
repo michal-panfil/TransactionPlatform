@@ -53,7 +53,6 @@ namespace TransactionPlatform.WebApp.Controllers
                     await signInManager.SignInAsync(user, pass);
                     logger.LogInformation("Use created a new account with password");
 
-
                     await PreaperWalletForNewUser(model.Email);
 
                     return RedirectToLocal(returnUrl);
