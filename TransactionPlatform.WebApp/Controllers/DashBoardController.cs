@@ -14,19 +14,22 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices.ComTypes;
+using Microsoft.Extensions.Logging;
 
 namespace TransactionPlatform.WebApp.Controllers
 {
     [Authorize]
-    public class DashBoardController : Controller
+    public class DashboardController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly ILogger<AccountController> logger;
 
         public AppDbContext Context { get; }
-        public DashBoardController(UserManager<ApplicationUser> userManager, AppDbContext ctx)
+        public DashboardController(UserManager<ApplicationUser> userManager, AppDbContext ctx, ILogger<AccountController> logger)
         {
             this.userManager = userManager;
             Context = ctx;
+            this.logger = logger;
         }
         public async Task<IActionResult> Index()
         {
@@ -34,18 +37,23 @@ namespace TransactionPlatform.WebApp.Controllers
             
             var apiCaller = new ApiCaller();
          
-            
-
-                var userName = User.Identity.Name;
-                var user = await userManager.FindByNameAsync(userName);
-                var walletTsk = apiCaller.GetWalletFromAPI(user.Id );
+            var userName = User.Identity.Name;
+            var user = await userManager.FindByNameAsync(userName);
+            try
+            {
+                var walletTsk = apiCaller.GetWalletFromAPI(user.Id);
                 var instrumentsTsk = apiCaller.GetInstrumentsFromAPI();
-
                 model.Instruments = await instrumentsTsk;
                 model.UserWallet = await walletTsk;
-
+            }
+            catch (Exception)
+            {
+                var errorMessage = $"Can't reach api services {DateTime.Now}";
+                logger.LogError(errorMessage);
+                ViewBag.ConnectionError = "Sorry we could not reach importent services. Please wait a moment and try again or reach helpdesk";
+            }
+           
             return View(model);
-
         }
     }
 }

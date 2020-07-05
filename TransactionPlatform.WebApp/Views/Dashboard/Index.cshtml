@@ -2,7 +2,11 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+    @if(ViewBag.ConnectionError !=  null)
+    {
+    <div class="alert-warning">@ViewBag.ConnectionError</div>
+    }
+    else { 
     <div class="container">
         <div class="row">
             <table class="table bg-success text-white">
@@ -40,4 +44,5 @@
 
 
     </div>
+    }
 <script src="~/js/Dashboard.js"></script>
