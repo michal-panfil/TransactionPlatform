@@ -1,9 +1,10 @@
-﻿let currentInstrumentId;
-let Currentitem;
+﻿let currentInstrumentId, Currentitem;
 let UpdatedInstruments = [];
 
-setInterval(GetInstrumentPrices, 10000);
 $(document).ready(GetInstrumentPrices, 1000);
+setInterval(GetInstrumentPrices, 10000);
+
+//Buy Logic
 
 function OpenBuyInstrumentForm(name, identificator) {
     let popup = $('.popup-box.popup-buy');
@@ -11,34 +12,19 @@ function OpenBuyInstrumentForm(name, identificator) {
 
     let ticker = $('#buyTicker');
     let price = $('#buyPrice');
-    let x = '#' + identificator;
-    let instrumentprice = $(x).find('.instrument-price-item').text();
+    let id = '#' + identificator;
+    let instrumentprice = $(id).find('.instrument-price-item').text();
     ticker.val(name);
     price.val(instrumentprice);
+}
 
-}
-function OpenSellInstrumentForm(name, price, volumen) {
-    let popup = $('.popup-box.popup-sell');
-    popup.toggle();
+function SendBuyTransactionRequest() {
+    let popup = $('.popup-box.popup-buy');
 
-    $('#sellTicker').val(name);
-    $('#sellTicker').text(name);
-    $('#sellPrice').val(price);
-    $('#sellPrice').text(price);
-    $('#sellVolumen').val(volumen);
-    $('#sellVolumen').text(volumen);
-}
-function CancelBuyInstrumentForm() {
-    let popup = $('.popup-box.popup-buy');
-    popup.toggle();
-}
-function SendBuyTransactionRequest () {
-    let popup = $('.popup-box.popup-buy');
-  
     let tic = $('#buyTicker').val();
     let prc = $('#buyPrice').val();
     let vol = $('#buyVolumen').val();
-    
+
     popup.toggle();
     $.ajax({
         type: "POST",
@@ -52,10 +38,26 @@ function SendBuyTransactionRequest () {
         },
         error: function () { console.log("error") }
     })
+
     $('.container').append('<div class="popup-box request-succes"><h3>Request has been sent</h3></div>');
-    setTimeout(function () { $('.request-succes').remove(); }, 2000); 
-    
+    setTimeout(function () { $('.request-succes').remove(); }, 2000);
 }
+
+
+// Sell logic
+
+function OpenSellInstrumentForm(name, price, volumen) {
+    let popup = $('.popup-box.popup-sell');
+    popup.toggle();
+    $('#sellTicker').val(name);
+    $('#sellTicker').text(name);
+    $('#sellPrice').val(price);
+    $('#sellPrice').text(price);
+    $('#sellVolumen').val(volumen);
+    $('#sellVolumen').text(volumen);
+}
+
+
 function SendSellTransactionRequest() {
     let popup = $('.popup-box.popup-sell');
 
@@ -72,6 +74,8 @@ function SendSellTransactionRequest() {
         success: function (response) {
             console.log("response : ")
             console.dir(response)
+            let instrumentId = 'asset' + tic;
+            $(instrumentId).remove();
         },
         error: function () { console.log("error") }
     })
@@ -80,6 +84,7 @@ function SendSellTransactionRequest() {
 
 }
 
+//Instrument price update 
 
 function GetInstrumentPrices() {
     $.ajax({
@@ -115,15 +120,9 @@ function AssingPriceToInstrument(item) {
     UpdatedInstruments.push(currInstVolumen);
 }
 
-function HighlightUpdatedValues() {
+//Common logic
 
-    UpdatedInstruments.forEach(HighlightElement);
-
-}
-
-function HighlightElement(element, index, array) {
-    var obj = {}
-    obj = element[0];
-    obj.addClas("highlight1s");
-    obj.removeClas("highlight1s");
+function CancelInstrumentForm() {
+    let popup = $('.popup-box');
+    popup.hide();
 }

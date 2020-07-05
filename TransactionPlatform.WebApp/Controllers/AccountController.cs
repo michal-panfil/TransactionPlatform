@@ -62,7 +62,6 @@ namespace TransactionPlatform.WebApp.Controllers
             }
             return View(model);
         }
-
         private async Task PreaperWalletForNewUser(string userName)
         {
             var user = await userManager.FindByNameAsync(userName);
@@ -70,12 +69,12 @@ namespace TransactionPlatform.WebApp.Controllers
 
             var api = new ApiCaller();
             await api.CreateWallet(wallet);
-            
         }
-
         
         #endregion
+
         #region Login
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl)

@@ -87,6 +87,4 @@ namespace TransactionPlatform.WebApp.Data
             return resultWallet;
         }
     }
-
-
 }

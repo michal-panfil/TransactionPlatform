@@ -7,14 +7,13 @@ using TransactionPlatform.DomainLibrary.Models.WalletModels;
 
 namespace TransactionPlatform.WebApp.Models
 {
-    public class DashBoardDto
+    public class DashboardDto
     {
         public Wallet UserWallet { get; set; }
         public List<Instrument> Instruments { get; set; }
-        public DashBoardDto()
+        public DashboardDto()
         {
             Instruments = new List<Instrument>();
         }
-
     }
 }

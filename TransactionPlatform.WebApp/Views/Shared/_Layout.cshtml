@@ -30,47 +30,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="DashBoard" asp-action="Index">Dashboard</a>
                         </li>
-
-                        <!--
-        <li class="nav-item ml-auto p-2">
-            <div class="form-row">
-                <div>
-                    <a class="btn  btn-primary text-light ml-3 " onclick="showLogin()">Log in</a>
-                    <a class="btn  btn-primary text-light ml-1" onclick="showSignUp()">Sign up</a>
-
-                </div>
-            </div>
-            <div class="form-row form">
-                <form asp-area="" asp-controller="Autho" asp-action="Login" method="post">
-                    <div id="login-nav-form" class="form-group access-form">
-                        <input class="form-control" type="email" placeholder="email" name="UserName" />
-                        <input class="form-control" type="text" placeholder="password" name="Password" />
-                        <button class="btn btn-sm btn-primary">LogIn</button>
-                    </div>
-                </form>
-                <form asp-area="" asp-controller="Autho" asp-action="Register" method="post">
-                    <div class="form-group access-form" id="singup-nav-form">
-                        <input class="form-control" type="text" placeholder="First name" name="FirstName" />
-                        <input class="form-control" type="text" placeholder="Last name" name="LastName" />
-                        <input class="form-control" type="text" placeholder="Company" name="Company" />
-                        <input class="form-control" type="email" placeholder="email" name="Email" />
-                        <input class="form-control" type="text" placeholder="password" name="Password" />
-                        <button class="btn btn-sm btn-primary">SignUp</button>
-
-                    </div>
-                </form>
-            </div>
-
-        </li>
-            -->
-                        <!-- END Login Register -->
-
-
                     </ul>
 
                     @await Html.PartialAsync("_LoginPartial")
-
-                    <!--Login Register -->
 
                 </div>
             </div>

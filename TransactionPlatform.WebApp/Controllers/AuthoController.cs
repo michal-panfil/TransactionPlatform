@@ -19,7 +19,6 @@ namespace TransactionPlatform.WebApp.Controllers
             this.authRep = authRep;
         }
 
-
         public IActionResult Register(IFormCollection form)
         {
             var authUser = new AuthoUserDto
@@ -38,8 +37,6 @@ namespace TransactionPlatform.WebApp.Controllers
                 Password = form["Password"]
             };
             
-
-
             if (  !authRep.UserExist(authUser.User.Email).Result)
             {
                 authRep.Register(authUser);

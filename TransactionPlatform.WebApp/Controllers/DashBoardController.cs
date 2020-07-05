@@ -30,7 +30,7 @@ namespace TransactionPlatform.WebApp.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var model = new DashBoardDto();
+            var model = new DashboardDto();
             
             var apiCaller = new ApiCaller();
          
@@ -43,26 +43,9 @@ namespace TransactionPlatform.WebApp.Controllers
 
                 model.Instruments = await instrumentsTsk;
                 model.UserWallet = await walletTsk;
-           
-            
-            
+
             return View(model);
 
         }
     }
 }
-
-/* SEEDING
- * Context.Instruments.AddRange(new List<Instrument>
-            {
-                new Instrument() {Id = 1, Name = "Oil Barnd 3", Ticker= "OB3", Description ="The clearest and moste value cartify oil"},
-            new Instrument() { Id = 2, Name = "Corn US", Ticker = "CUS", Description = "Corn from midlle of USA wigh quality" },
-            new Instrument() { Id = 3, Name = "Platinum", Ticker = "PLM", Description = "Platinum for electronic puroses" },
-            new Instrument() { Id = 4, Name = "Caffe Arabica", Ticker = "CA", Description = "Coffe rady to be burn, Arabbica type " },
-            new Instrument() { Id = 5, Name = "Steal", Ticker = "STL", Description = "Certificated construction steal" },
-            new Instrument() { Id = 6, Name = "Wood", Ticker = "WOD", Description = "Brasilian wood - long size" },
-            new Instrument() { Id = 7, Name = "Natural GAS", Ticker = "NGS", Description = "Rusian low quality natural gas" },
-            new Instrument() { Id = 8, Name = "Wather", Ticker = "WTR", Description = "Contract 6 mont for water" },
-        });
-            Context.SaveChanges();
-*/
