@@ -18,7 +18,7 @@ namespace TransactionPlatform.WebApp.Data
 
         public async Task<List<Instrument>> GetAllInstrumentsAsync()
         {
-            var instruments = Context.Instruments.ToList();
+            var instruments = await Context.Instruments.ToListAsync();
 
             return instruments;
 

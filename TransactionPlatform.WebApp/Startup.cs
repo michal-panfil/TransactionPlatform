@@ -34,8 +34,6 @@ namespace TransactionPlatform.WebApp
             services.AddHttpClient();
             services.AddCors(options =>
             options.AddPolicy(name: MyOrigin, builder => { builder.AllowAnyOrigin(); }));
-            // services.AddScoped<IAuthRepository, AuthRepository>();
-            //  services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<AppDbContext>();
 
@@ -56,9 +54,10 @@ namespace TransactionPlatform.WebApp
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseStaticFiles();
 
+            app.UseStaticFiles();
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
             
@@ -70,7 +69,6 @@ namespace TransactionPlatform.WebApp
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-           // app.UseCors(MyOrigin);
         }
     }
 }

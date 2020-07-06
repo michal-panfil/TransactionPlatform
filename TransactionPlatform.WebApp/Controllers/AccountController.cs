@@ -53,7 +53,6 @@ namespace TransactionPlatform.WebApp.Controllers
                     await signInManager.SignInAsync(user, pass);
                     logger.LogInformation("Use created a new account with password");
 
-
                     await PreaperWalletForNewUser(model.Email);
 
                     return RedirectToLocal(returnUrl);
@@ -62,7 +61,6 @@ namespace TransactionPlatform.WebApp.Controllers
             }
             return View(model);
         }
-
         private async Task PreaperWalletForNewUser(string userName)
         {
             var user = await userManager.FindByNameAsync(userName);
@@ -70,12 +68,12 @@ namespace TransactionPlatform.WebApp.Controllers
 
             var api = new ApiCaller();
             await api.CreateWallet(wallet);
-            
         }
-
         
         #endregion
+
         #region Login
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl)

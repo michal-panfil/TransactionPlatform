@@ -1,9 +1,7 @@
-﻿@model DashBoardDto;
+﻿@model DashboardDto;
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-
-
 
 <table class="table">
 
@@ -26,7 +24,8 @@
 
             @foreach (var asset in Model.UserWallet?.Assets)
             {
-                <tr>
+                var id = $"asset" + asset.Name;
+                <tr id="@id">
                     <td>@asset.Name</td>
                     <td>@asset.Volumen</td>
                     <td>@asset.BuyPrice</td>
@@ -34,14 +33,7 @@
                     
                     <td><button class="btn btn-danger" onclick="OpenSellInstrumentForm('@asset.Name','@asset.BuyPrice','@asset.Volumen' )">Sell</button></td>
                 </tr>
-
-
             }
         }
-
-
-
-
-
     </tbody>
 </table>

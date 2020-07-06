@@ -35,15 +35,6 @@ namespace TransactionPlatform.TransactionService
             return instruments;
         }
 
-        internal object BuyAsset(TransactionFormDto transactionDto)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal object SellAsset(TransactionFormDto transactionDto)
-        {
-            throw new NotImplementedException();
-        }
 
         public string ChargeWallet(TransactionFormDto transactionDto)
         {
@@ -67,7 +58,6 @@ namespace TransactionPlatform.TransactionService
 
         }
         
-
         internal string MoveAsset(TransactionFormDto transactionDto)
         {
             var sufixUri = transactionDto.TransType == TransactionType.Buy ?  @"UsersWallet/AddAssetToWallet" : @"UsersWallet/RemoveAssetFromWallet";
@@ -84,7 +74,6 @@ namespace TransactionPlatform.TransactionService
 
 
             return response; 
-
         }
 
         public Instrument GetInstrumentByTicker(string ticker)

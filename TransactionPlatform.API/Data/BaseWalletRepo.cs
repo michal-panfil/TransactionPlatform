@@ -8,7 +8,6 @@ using TransactionPlatform.DomainLibrary.Models.WalletModels;
 
 namespace TransactionPlatform.API.Data
 {
-
     public class BaseWalletRepo : IWalletRepo
     {
         private readonly ApiDbContext Context;
@@ -31,7 +30,6 @@ namespace TransactionPlatform.API.Data
         public Wallet AddWallet(Wallet wallet)
         {
             Context.Wallets.Add(wallet);
-            //Context.Medium.Add(wallet.CirculatingMedium);
             Context.SaveChanges();
             return wallet; 
         }
@@ -67,8 +65,6 @@ namespace TransactionPlatform.API.Data
         public Wallet GetWalletByUserId(string userId)
         {
             var wallet = Context.Wallets.Where(w => w.UserId == userId).Include(w => w.CirculatingMedium).Include(w => w.Assets).SingleOrDefault();
-           // var wallet = Context.Wallets.Where(w => w.UserId == userId).SingleOrDefault();//.Include(w => w.Currency).SingleOrDefault();
-           // wallet.Assets = Context.Assets.Where(a => a.StandardWalletId == wallet.Id).ToList();
           
             return wallet;
         }

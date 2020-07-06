@@ -10,13 +10,6 @@ namespace TransactionPlatform.WebApp.Data
         AuthoUserDto Register(AuthoUserDto authoUser);
         Task<UsersAccess> Login(string username, string password);
         Task<bool> UserExist(string username);
-
-
-/*
-        Task<User> Register(User user, string password);
-        Task<UsersAccess> Login(string username, string password);
-        Task<bool> UserExist(string username);
-        */
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace TransactionPlatform.WebApp.Data
     public class ApiCaller
     {
         public string BaseUri { get; set; } = $"http://localhost:54868/api/";
+       
+
  
         private async Task<string> CallApiGet(string sufix)
         {
@@ -53,7 +56,6 @@ namespace TransactionPlatform.WebApp.Data
          
         public async Task<Wallet> GetWalletFromAPI(string userId)
         {
-            //SufixUri = $"UsersWallet/GetWallet?Id=" + userId;
             var sufixUri = $"UsersWallet/GetWallet?Id=" + userId;
 
 
@@ -72,21 +74,17 @@ namespace TransactionPlatform.WebApp.Data
         public async Task<Wallet> CreateWallet(Wallet wallet)
         {
             var sufixUri = $"UsersWallet/AddWallet";
-            var json = new JsonTextWriter(new StringWriter(new StringBuilder()));
-            var textW = new StringWriter(new StringBuilder());
-            var x = new JsonSerializer();
-            x.Serialize(textW, wallet);
 
-            var content = new StringContent(textW.ToString(), Encoding.UTF8, "application/json");
+            var stringWriter = new StringWriter(new StringBuilder());
+            var serialiazer = new JsonSerializer();
+            serialiazer.Serialize(stringWriter, wallet);
 
-
+            var content = new StringContent(stringWriter.ToString(), Encoding.UTF8, "application/json");
             var apiTasks = CallApiPost(sufixUri, content);
-            var apiResponse = await apiTasks;
-            var resultWallet = JsonConvert.DeserializeObject<Wallet>(apiResponse);
+
+            var resultWallet = JsonConvert.DeserializeObject<Wallet>(await apiTasks);
 
             return resultWallet;
         }
     }
-
-
 }
