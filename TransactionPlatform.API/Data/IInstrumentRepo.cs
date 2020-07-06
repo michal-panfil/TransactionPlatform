@@ -7,7 +7,7 @@ namespace TransactionPlatform.API.Data
 {
     public interface IInstrumentRepo
     {
-        Instrument GetInstrumentByTicker(string Ticker);
-        List<Instrument> GetAllInstruments();
+        Task<Instrument> GetInstrumentByTicker(string Ticker);
+        Task<List<Instrument>> GetAllInstruments();
     }
 }

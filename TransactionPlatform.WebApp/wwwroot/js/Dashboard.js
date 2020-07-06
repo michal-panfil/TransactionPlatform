@@ -24,7 +24,7 @@ function SendBuyTransactionRequest() {
     let tic = $('#buyTicker').val();
     let prc = $('#buyPrice').val();
     let vol = $('#buyVolumen').val();
-
+    if(tic)
     popup.toggle();
     $.ajax({
         type: "POST",

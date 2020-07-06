@@ -17,64 +17,61 @@ namespace TransactionPlatform.API.Data
             Context = context;
         }
 
-        public bool AddAssetToWallet(string userId, BaseAsset asset)
+        public async Task<bool> AddAssetToWallet(string userId, BaseAsset asset)
         {
-            
-            var wallet = Context.Wallets.Where(w => w.UserId == userId).Include(w => w.Assets).SingleOrDefault();
-            wallet.Assets.Add(asset);
-            Context.SaveChanges();
-            return true;
+
+            var wallet = await Context.Wallets.Where(w => w.UserId == userId).Include(w => w.Assets).SingleOrDefaultAsync();
+            if(wallet != null)
+            {
+                wallet.Assets.Add(asset);
+                await Context.SaveChangesAsync();
+                return true;
+            }
+            return false;
 
         }
 
-        public Wallet AddWallet(Wallet wallet)
+        public async Task<Wallet> AddWallet(Wallet wallet)
         {
-            Context.Wallets.Add(wallet);
-            Context.SaveChanges();
+            await Context.Wallets.AddAsync(wallet);
+            await Context.SaveChangesAsync();
             return wallet; 
         }
 
-        public bool ChargeWallet(string userId, decimal price)
+        public async Task<bool> ChargeWallet(string userId, decimal price)
         {
-            var wallet = Context.Wallets.Where(w => w.UserId == userId).Include(w => w.CirculatingMedium).SingleOrDefault();
+            var wallet = await Context.Wallets.Where(w => w.UserId == userId).Include(w => w.CirculatingMedium).SingleOrDefaultAsync();
             
             if(price > 0)
             {
                 if (wallet.CirculatingMedium.AvailableAmount > price)
                 {
                     wallet.CirculatingMedium.AvailableAmount -= price;
-                    Context.SaveChanges();
+                    await Context.SaveChangesAsync();
                     return true;
                 }
-
             }
             else
             {
-                //
                 wallet.CirculatingMedium.AvailableAmount -= price;
-                Context.SaveChanges();
+                await Context.SaveChangesAsync();
                 return true;
             }
-            
-            
-
             return false;
-
         }
 
-        public Wallet GetWalletByUserId(string userId)
+        public async Task<Wallet> GetWalletByUserId(string userId)
         {
-            var wallet = Context.Wallets.Where(w => w.UserId == userId).Include(w => w.CirculatingMedium).Include(w => w.Assets).SingleOrDefault();
-          
+            var wallet = await Context.Wallets.Where(w => w.UserId == userId).Include(w => w.CirculatingMedium).Include(w => w.Assets).SingleOrDefaultAsync();
             return wallet;
         }
 
-        public object RemoveAssetFromWallet(string userId, BaseAsset asset)
+        public async Task<bool> RemoveAssetFromWallet(string userId, BaseAsset asset)
         {
-            var wallet = Context.Wallets.Where(w => w.UserId == userId).Include(w => w.Assets).SingleOrDefault();
-            var assetToRemove = wallet.Assets.Where(a => a.Name.Equals(asset.Name)).FirstOrDefault(); ;
+            var wallet = await Context.Wallets.Where(w => w.UserId == userId).Include(w => w.Assets).SingleOrDefaultAsync();
+            var assetToRemove = wallet.Assets.Where(a => a.Name.Equals(asset.Name)).FirstOrDefault(); 
             wallet.Assets.Remove(assetToRemove);
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
             return true;
         }
     }

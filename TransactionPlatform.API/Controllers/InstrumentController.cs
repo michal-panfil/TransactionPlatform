@@ -23,19 +23,19 @@ namespace TransactionPlatform.API.Controllers
         }
         [HttpGet]
         [Route("[action]")]
-        public List<Instrument> GetInstruments()
+        public async Task<List<Instrument>> GetInstruments()
         {
-            var instruments = repo.GetAllInstruments();
+            var instruments = await repo.GetAllInstruments();
             return instruments;
         }
         
         [HttpGet]
         [Route("[action]")]
 
-        public Instrument GetInstrumentByTicker(string ticker)
+        public async Task<Instrument> GetInstrumentByTicker(string ticker)
         {
 
-            var instrument = repo.GetInstrumentByTicker(ticker);
+            var instrument =  await repo.GetInstrumentByTicker(ticker);
             return instrument;
         }
 

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TransactionPlatform.DomainLibrary.Models;
 
 namespace TransactionPlatform.API.Data
@@ -12,15 +14,15 @@ namespace TransactionPlatform.API.Data
         {
             this.context = context;
         }
-        public List<Instrument> GetAllInstruments()
+        public async Task<List<Instrument>> GetAllInstruments()
         {
-            var instruments = context.Instruments.ToList();
+            var instruments = await context.Instruments.ToListAsync();
             return instruments;
         }
 
-        public Instrument GetInstrumentByTicker(string ticker)
+        public async Task<Instrument> GetInstrumentByTicker(string ticker)
         {
-            var instrument = context.Instruments.Where(i => i.Ticker == ticker).FirstOrDefault();
+            var instrument = await context.Instruments.Where(i => i.Ticker == ticker).FirstOrDefaultAsync();
             return instrument;
         }
     }
