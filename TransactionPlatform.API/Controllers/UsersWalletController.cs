@@ -29,18 +29,18 @@ namespace TransactionPlatform.API.Controllers
         }
         [HttpGet]
         [Route("[action]")]
-        public IActionResult GetWallet(string id)
+        public async Task<IActionResult> GetWallet(string id)
         {
-            var result = repo.GetWalletByUserId(id);
+            var result = await repo.GetWalletByUserId(id);
 
             return Ok(JsonConvert.SerializeObject(result, Formatting.Indented));
         }
 
         [HttpPost]
         [Route("[action]")]
-        public Wallet AddWallet(Wallet wallet)
+        public async Task<Wallet> AddWallet(Wallet wallet)
         {
-            var result = repo.AddWallet(wallet);
+            var result = await repo.AddWallet(wallet);
 
             return result;
         }
@@ -48,11 +48,9 @@ namespace TransactionPlatform.API.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public string ChargeCreditWallt(ChargeWalletDto dto)
+        public async Task<string> ChargeCreditWallt(ChargeWalletDto dto)
         {
-
-
-            var result = repo.ChargeWallet(dto.UserId, dto.Amount);
+            var result = await repo.ChargeWallet(dto.UserId, dto.Amount);
 
             return result.ToString();
         }
@@ -61,7 +59,7 @@ namespace TransactionPlatform.API.Controllers
         [HttpPost]
         [Route("[action]")]
 
-        public bool AddAssetToWallet(TransactionFormDto transaction)
+        public async Task<bool> AddAssetToWallet(TransactionFormDto transaction)
         {
 
             var asset = new BaseAsset()
@@ -73,14 +71,14 @@ namespace TransactionPlatform.API.Controllers
                 BuyDT = transaction.TransactionTime,
                 SaleDT = null,
             };
-            var result = repo.AddAssetToWallet(transaction.UserId, asset);
+            var result = await repo.AddAssetToWallet(transaction.UserId, asset);
 
             return false;
         }
         [HttpPost]
         [Route("[action]")]
 
-        public bool RemoveAssetFromWallet(TransactionFormDto transaction)
+        public async Task<bool> RemoveAssetFromWallet(TransactionFormDto transaction)
         {
 
             var asset = new BaseAsset()
@@ -92,10 +90,9 @@ namespace TransactionPlatform.API.Controllers
                 BuyDT = transaction.TransactionTime,
                 SaleDT = null,
             };
-            var result = repo.RemoveAssetFromWallet(transaction.UserId, asset);
+            var result = await repo.RemoveAssetFromWallet(transaction.UserId, asset);
 
             return false;
         }
-
     }
 }

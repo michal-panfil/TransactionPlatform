@@ -8,10 +8,10 @@ namespace TransactionPlatform.API.Data
 {
     interface IWalletRepo
     {
-        Wallet GetWalletByUserId(string id);
-        Wallet AddWallet(Wallet wallet);
-        bool ChargeWallet(string userId, decimal price);
-        bool AddAssetToWallet(string userId, BaseAsset asset);
-        object RemoveAssetFromWallet(string userId, BaseAsset asset);
+        Task<Wallet> GetWalletByUserId(string id);
+        Task<Wallet> AddWallet(Wallet wallet);
+        Task<bool> ChargeWallet(string userId, decimal price);
+        Task<bool> AddAssetToWallet(string userId, BaseAsset asset);
+        Task<bool> RemoveAssetFromWallet(string userId, BaseAsset asset);
     }
 }
