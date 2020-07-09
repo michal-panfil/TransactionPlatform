@@ -6,6 +6,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using TransactionPlatform.DomainLibrary.Dtos;
+using TransactionPlatform.TransactionService.Models;
 
 namespace TransactionPlatform.TransactionService
 {
@@ -15,13 +16,20 @@ namespace TransactionPlatform.TransactionService
 	{
 		public bool AcceptTransaction(TransactionFormDto transactionDto)
 		{
-			var api = new ApiCaller();
+			var orderAccepted = false;
 
-			var charged = api.ChargeWallet(transactionDto);
+			var order = new TransactionOrder
+			{
+				Id = new Guid(),
+				TransactionForm = transactionDto,
+				ReceivedDT = DateTime.UtcNow,
+				Status = TransactionStatus.New,
+			};
+
+			orderAccepted = EntryQueue.AddToQueue(order);
 			
-				var x = api.MoveAsset(transactionDto);
 
-			return true;
+			return orderAccepted;
 		}
 
 		public List<InstrumentPriceDto> GetPriceOfAllInstruments()

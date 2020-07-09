@@ -8,16 +8,22 @@ namespace TransactionPlatform.TransactionService.Models
 {
     public class EntryQueue
     {
-        public static List<TransactionFormDto> TransactionQueue { get; }
+        public static List<TransactionOrder> TransactionQueue { get; }
 
-        public void AddToQueue(TransactionFormDto transaction)
+        public static bool AddToQueue(TransactionOrder transaction)
         {
-            var isDuplicated
-            TransactionQueue.Add(transaction);
+            var isDuplicated = TransactionQueue.Any(i => i.TransactionForm.Id == transaction.Id);
+
+            if (!isDuplicated)
+            {
+                TransactionQueue.Add(transaction);
+                return true;
+            }
+            return false;
         }
-        public void RemoveFromQueue(TransactionFormDto transaction)
+        public static void RemoveFromQueue(TransactionOrder transaction)
         {
-            TransactionQueue.Remove(tr)
+            TransactionQueue.Remove(transaction);
         }
 
     }
