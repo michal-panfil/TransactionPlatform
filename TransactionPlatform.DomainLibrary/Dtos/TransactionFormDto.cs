@@ -11,6 +11,7 @@ namespace TransactionPlatform.DomainLibrary.Dtos
     }
     public class TransactionFormDto
     {
+        public Guid Id { get; set; }
         public string Ticker { get; set; }
         public float Price { get; set; }
         public int Volumen { get; set; }
