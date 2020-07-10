@@ -13,7 +13,7 @@ using TransactionPlatform.DomainLibrary.Models.WalletModels;
 
 namespace TransactionPlatform.TransactionService
 {
-    public class ApiCaller
+    internal class ApiCaller :IDataProvider
     {
         public string BaseUri { get; set; } = $"http://localhost:54868/api/";
 
@@ -57,8 +57,8 @@ namespace TransactionPlatform.TransactionService
             return response;
 
         }
-        
-        internal string MoveAsset(TransactionFormDto transactionDto)
+
+        public string MoveAsset(TransactionFormDto transactionDto)
         {
             var sufixUri = transactionDto.TransType == TransactionType.Buy ?  @"UsersWallet/AddAssetToWallet" : @"UsersWallet/RemoveAssetFromWallet";
         

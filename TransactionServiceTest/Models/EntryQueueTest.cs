@@ -14,7 +14,7 @@ namespace TransactionServiceTest.Models
         {
             var order = new TransactionOrder();
 
-            var sucessfullAdded = EntryQueue.AddToQueue(order);
+            bool sucessfullAdded = EntryQueue.AddToQueue(order);
             
             Assert.IsTrue(sucessfullAdded);
             Assert.IsTrue(EntryQueue.TransactionQueue.Contains(order));
