@@ -42,6 +42,8 @@ namespace TransactionPlatform.WebApp
                 options.LoginPath = "/Account/Login";
             });
             services.AddControllersWithViews().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddMemoryCache();
+            services.AddSession();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
             public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -56,6 +58,7 @@ namespace TransactionPlatform.WebApp
             }
 
             app.UseStaticFiles();
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication();
