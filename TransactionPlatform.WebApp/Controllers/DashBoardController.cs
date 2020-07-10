@@ -15,6 +15,7 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices.ComTypes;
 using Microsoft.Extensions.Logging;
+using TransactionPlatform.WebApp.Extensions;
 
 namespace TransactionPlatform.WebApp.Controllers
 {
@@ -42,8 +43,19 @@ namespace TransactionPlatform.WebApp.Controllers
             try
             {
                 var walletTsk = apiCaller.GetWalletFromAPI(user.Id);
-                var instrumentsTsk = apiCaller.GetInstrumentsFromAPI();
-                model.Instruments = await instrumentsTsk;
+
+                var cachedInstruments = HttpContext.Session.GetJson<List<Instrument>>("instruments");
+
+                if(cachedInstruments != null)
+                {
+                    model.Instruments = cachedInstruments;
+                }
+                else
+                {
+                    model.Instruments = await apiCaller.GetInstrumentsFromAPI();
+                    HttpContext.Session.SetJson("instruments", model.Instruments);
+                }
+
                 model.UserWallet = await walletTsk;
             }
             catch (Exception)
