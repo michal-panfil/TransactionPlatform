@@ -71,6 +71,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\EntryQueue.cs" />
+    <Compile Include="Models\TransactionOrder.cs" />
+    <Compile Include="Models\TransactionStatus.cs" />
     <Compile Include="TransactionService.svc.cs">
       <DependentUpon>TransactionService.svc</DependentUpon>
     </Compile>

@@ -8,6 +8,11 @@ namespace TransactionPlatform.TransactionService.Models
 {
     public class TransactionOrder
     {
+
+        public TransactionOrder()
+        {
+            Id = Guid.NewGuid();
+        }
         public Guid Id { get; set; }
         public TransactionFormDto TransactionForm { get; set; }
         public TransactionStatus Status { get; set; }
