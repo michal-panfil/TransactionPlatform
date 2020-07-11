@@ -8,7 +8,7 @@ namespace TransactionPlatform.TransactionService.Models
 {
     public class EntryQueue
     {
-        public static List<TransactionOrder> TransactionQueue { get; } = new List<TransactionOrder>();
+        public static Queue<TransactionOrder> TransactionQueue { get; } = new Queue<TransactionOrder>();
 
         public static bool AddToQueue(TransactionOrder transaction)
         {
@@ -16,15 +16,15 @@ namespace TransactionPlatform.TransactionService.Models
 
             if (!isDuplicated)
             {
-                TransactionQueue.Add(transaction);
+                TransactionQueue.Enqueue(transaction);
                 return true;
             }
             return false;
         }
-        public static bool RemoveFromQueue(TransactionOrder transaction)
+        public static TransactionOrder GetNextTransaction ()
         {
-            var succesed =  TransactionQueue.Remove(transaction);
-            return succesed;
+            var nextTransaction =  TransactionQueue.Dequeue();
+            return nextTransaction;
         }
 
     }

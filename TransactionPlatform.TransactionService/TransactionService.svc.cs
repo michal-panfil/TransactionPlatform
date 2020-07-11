@@ -25,14 +25,19 @@ namespace TransactionPlatform.TransactionService
 				ReceivedDT = DateTime.UtcNow,
 				Status = TransactionStatus.New,
 			};
-
+			var orderIsValid = ValidateOrder(order);
 			orderAccepted = EntryQueue.AddToQueue(order);
 			
 
 			return orderAccepted;
 		}
 
-		public List<InstrumentPriceDto> GetPriceOfAllInstruments()
+        private object ValidateOrder(TransactionOrder order)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<InstrumentPriceDto> GetPriceOfAllInstruments()
 		{
 			var rnd = new Random();
 			var priceList = new List<InstrumentPriceDto>();

@@ -35,6 +35,10 @@ namespace TransactionPlatform.DomainLibrary.Dtos
 
         public TransactionType TransType { get; set; }
 
+        public TransactionFormDto()
+        {
+
+        }
         public TransactionFormDto(string ticker, float price, int volumen, string userId, DateTime transactionTime, TransactionType transType)
         {
             Id = Guid.NewGuid();

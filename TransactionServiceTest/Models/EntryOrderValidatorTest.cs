@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TransactionPlatform.DomainLibrary.Dtos;
+using TransactionPlatform.DomainLibrary.Models.WalletModels;
 using TransactionPlatform.TransactionService.Models;
 
 namespace TransactionServiceTest.Models
@@ -42,18 +43,57 @@ namespace TransactionServiceTest.Models
         }
    
         [Test]
-        [TestCase("t1")]
-        public void ValidateWallet_EnoughCash_succes(string userId)
+        public void ValidateWallet_BuyEnoughCash_succes()
         {
-            var result = EntryOrderValidator.ValidateWallet(userId);
+            var form = new TransactionFormDto() { Price = 100f, Volumen = 100, TransType = TransactionType.Buy };
+            var wallet = new Wallet() { CirculatingMedium = new Cash() { AvailableAmount = 10001M } };
+
+            var result = EntryOrderValidator.ValidateWallet(form, wallet);
+            Assert.IsTrue(result);
+        }
+        [Test]
+        public void ValidateWallet_BuyExactliCash_succes()
+        {
+            var form = new TransactionFormDto() { Price = 100f, Volumen = 100, TransType = TransactionType.Buy };
+            var wallet = new Wallet() { CirculatingMedium = new Cash() { AvailableAmount = 10000M } };
+
+            var result = EntryOrderValidator.ValidateWallet(form, wallet);
+            Assert.IsTrue(result);
+        }
+        [Test]
+        public void ValidateWallet_BuyNotEnaughCash_Failed()
+        {
+            var form = new TransactionFormDto() { Price = 100f, Volumen = 100, TransType = TransactionType.Buy };
+            var wallet = new Wallet() { CirculatingMedium = new Cash() { AvailableAmount = 999M } };
+
+            var result = EntryOrderValidator.ValidateWallet(form, wallet);
             Assert.IsFalse(result);
         }
         [Test]
-        [TestCase("t2")]
-        public void ValidateWallet_NotEnaughCash_Failed(string userId)
+        public void ValidateWallet_SellHasInstrument_succes()
         {
-            var result = EntryOrderValidator.ValidateWallet(userId);
+            var form = new TransactionFormDto() {Ticker = "test", Volumen = 100, TransType = TransactionType.Sell };
+            var wallet = new Wallet() { Assets = new List<BaseAsset>() { new BaseAsset() { Name = "test", Volumen = 100 } } };
+            var result = EntryOrderValidator.ValidateWallet(form, wallet);
             Assert.IsTrue(result);
+        }
+        [Test]
+        public void ValidateWallet_SellHasSomeInstrument_Failed()
+        {
+            var form = new TransactionFormDto() { Ticker = "test", Volumen = 100, TransType = TransactionType.Sell };
+            var wallet = new Wallet() { Assets = new List<BaseAsset>() { new BaseAsset() { Name = "test", Volumen = 99 } } };
+            var result = EntryOrderValidator.ValidateWallet(form, wallet);
+            Assert.IsFalse(result);
+
+        }
+        [Test]
+        public void ValidateWallet_SellHasNotInstrument_Failed()
+        {
+            var form = new TransactionFormDto() { Ticker = "test", Volumen = 100, TransType = TransactionType.Sell };
+            var wallet = new Wallet() { Assets = new List<BaseAsset>() {  } };
+            var result = EntryOrderValidator.ValidateWallet(form, wallet);
+            Assert.IsFalse(result);
+
         }
     }
 }

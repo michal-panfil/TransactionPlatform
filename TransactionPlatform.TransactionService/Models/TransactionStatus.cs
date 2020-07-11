@@ -4,6 +4,7 @@
     {
         New,
         Validated,
+        Invalid,
         Waiting,
         Processing,
         Accepted,

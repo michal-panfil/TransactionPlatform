@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using TransactionPlatform.DomainLibrary.Dtos;
+using TransactionPlatform.DomainLibrary.Models.WalletModels;
 
 namespace TransactionPlatform.TransactionService.Models
 {
     public static class EntryOrderValidator
     {
-        // check if data from form are correct
         public static bool CheckFormDataCompleteness(TransactionFormDto form)
         {
             if (string.IsNullOrWhiteSpace((form.Id).ToString()) ||
@@ -39,10 +39,27 @@ namespace TransactionPlatform.TransactionService.Models
             return isValid;
         }
        
-        // Check if he's got enough money
-        public static bool ValidateWallet(string userId)
+        public static bool ValidateWallet(TransactionFormDto form, Wallet wallet)
         {
-            return false;
+            if(form.TransType == TransactionType.Sell)
+            {
+                var walletAsset = wallet.Assets.Where(a => a.Name == form.Ticker).FirstOrDefault();
+                var isValid = walletAsset != null && walletAsset.Volumen >= form.Volumen;
+                return isValid;
+
+            }
+            else if (form.TransType == TransactionType.Buy)
+            {
+                var neededCash = form.Price * form.Volumen;
+                var isValid = wallet.CirculatingMedium.AvailableAmount >= (decimal)neededCash;
+
+                return isValid;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
 }

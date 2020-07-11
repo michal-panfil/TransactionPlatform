@@ -35,7 +35,7 @@ namespace TransactionServiceTest.Models
         {
             var order = new TransactionOrder();
             var sucessfullAdded = EntryQueue.AddToQueue(order);
-            if (EntryQueue.TransactionQueue.Count == 0) Assert.Fail(); //Something went wrong woth adding ordet to list
+            if (EntryQueue.TransactionQueue.Count == 0) Assert.Fail("Something went wrong woth adding ordet to list"); 
 
             var removedSuccesed = EntryQueue.RemoveFromQueue(order);
 
