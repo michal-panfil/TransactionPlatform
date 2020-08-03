@@ -21,7 +21,7 @@ namespace TransactionPlatform.TransactionService.Models
             }
             return false;
         }
-        public static TransactionOrder GetNextTransaction ()
+        public static TransactionOrder GetNextTransaction()
         {
             var nextTransaction =  TransactionQueue.Dequeue();
             return nextTransaction;

@@ -31,25 +31,18 @@ namespace TransactionServiceTest.Models
             Assert.IsTrue(EntryQueue.TransactionQueue.Count == 1);
         }
         [Test]
-        public void RemoveFromQueueTest()
+        public void GetNextTransactionTest()
         {
             var order = new TransactionOrder();
-            var sucessfullAdded = EntryQueue.AddToQueue(order);
+            var orderTwo = new TransactionOrder();
+            var sucessfullAdded1 = EntryQueue.AddToQueue(order);
+            var sucessfullAdded2 = EntryQueue.AddToQueue(orderTwo);
             if (EntryQueue.TransactionQueue.Count == 0) Assert.Fail("Something went wrong woth adding ordet to list"); 
 
-            var removedSuccesed = EntryQueue.RemoveFromQueue(order);
+            var orderFromQueue = EntryQueue.GetNextTransaction();
 
-            Assert.IsTrue(removedSuccesed);
-            Assert.IsTrue(EntryQueue.TransactionQueue.Count == 0);
-        }
-        [Test]
-        public void RemoveFromQueueTest_DosntExistIterm()
-        {
-            var order = new TransactionOrder();
-          
-            var removedSuccesed = EntryQueue.RemoveFromQueue(order);
-
-            Assert.IsFalse(removedSuccesed);
+            Assert.IsTrue(order.Id == orderFromQueue.Id);
+            Assert.IsTrue(EntryQueue.TransactionQueue.Count == 1);
         }
     }
 }
