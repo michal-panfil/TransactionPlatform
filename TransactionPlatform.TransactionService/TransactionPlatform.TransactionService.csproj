@@ -80,6 +80,7 @@
     <Compile Include="Models\EntryQueue.cs" />
     <Compile Include="Models\OrderMatching.cs" />
     <Compile Include="Models\OrderProccessor.cs" />
+    <Compile Include="Models\TheFloor.cs" />
     <Compile Include="Models\TransactionOrder.cs" />
     <Compile Include="Models\TransactionStatus.cs" />
     <Compile Include="TransactionService.svc.cs">
