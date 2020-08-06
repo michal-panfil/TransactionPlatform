@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Threading.Tasks;
 using TransactionPlatform.DomainLibrary.Dtos;
 using TransactionPlatform.TransactionService.Models;
 
@@ -14,6 +15,18 @@ namespace TransactionPlatform.TransactionService
 	// NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
 	public class TransactionService : ITransactionService
 	{
+
+		public TransactionService()
+		{
+			
+				var processor = OrderProccessor.Instance;
+			
+		}
+		public void DoSomething()
+        {
+			var x = 5;
+
+		}
 		public bool AcceptTransaction(TransactionFormDto transactionDto)
 		{
 			var orderAccepted = false;
@@ -32,12 +45,12 @@ namespace TransactionPlatform.TransactionService
 			return orderAccepted;
 		}
 
-        private object ValidateOrder(TransactionOrder order)
-        {
-            throw new NotImplementedException();
-        }
+		private object ValidateOrder(TransactionOrder order)
+		{
+			throw new NotImplementedException();
+		}
 
-        public List<InstrumentPriceDto> GetPriceOfAllInstruments()
+		public List<InstrumentPriceDto> GetPriceOfAllInstruments()
 		{
 			var rnd = new Random();
 			var priceList = new List<InstrumentPriceDto>();
