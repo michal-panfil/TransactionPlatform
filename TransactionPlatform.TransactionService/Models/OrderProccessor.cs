@@ -33,7 +33,11 @@ namespace TransactionPlatform.TransactionService.Models
             {
                 while (true)
                 {
-                    MoveOrdersFromEntryQueueToMainQueue();
+                    var wasThereAnythingToDo = MoveOrdersFromEntryQueueToMainQueue();
+                    if (!wasThereAnythingToDo)
+                    {
+                        Task.Delay(5000);
+                    }
                 }
 
 
@@ -43,38 +47,50 @@ namespace TransactionPlatform.TransactionService.Models
             {
                 while (true)
                 {
-                    MatchOrdersOnFloor();
+                    var wasThereAnythingToDo = MatchOrdersOnFloor();
+                    if (!wasThereAnythingToDo)
+                    {
+                        Task.Delay(5000);
+                    }
                 }
-
-
             }); 
             
             Task.Run(() =>
             {
                 while (true)
                 {
-                    ConfirmedOrders();
+                    var wasThereAnythingToDo = ProcessTransaction();
+                    if (!wasThereAnythingToDo)
+                    {
+                        Task.Delay(5000);
+                    }
                 }
-
-
             });
         }
 
-        private void ConfirmedOrders()
+        private bool MoveOrdersFromEntryQueueToMainQueue()
         {
-            throw new NotImplementedException();
+            var movedAnyTransactions = false;
+            while (EntryQueue.TransactionQueue.Count > 0)
+            {
+                var transaction = EntryQueue.GetNextTransaction();
+                TheFloor.Instance.AddOrderToQueue(transaction);
+                movedAnyTransactions = true;
+            }
+
+            return movedAnyTransactions;
         }
 
-        private void MatchOrdersOnFloor()
+        private bool MatchOrdersOnFloor()
         {
-            throw new NotImplementedException();
+            return TheFloor.Instance.MatchTransactionOrder();
         }
 
-        private void MoveOrdersFromEntryQueueToMainQueue()
+        private bool ProcessTransaction()
         {
-            throw new NotImplementedException();
+            //move matching orders from
+            return false;
         }
 
-        
     }
 }

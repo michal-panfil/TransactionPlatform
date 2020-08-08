@@ -10,7 +10,7 @@ namespace TransactionPlatform.TransactionService.Models
 {
     public static class EntryOrderValidator
     {
-        public static bool CheckFormDataCompleteness(TransactionFormDto form)
+        public static bool CheckFormDataCompleteness(OrderFormDto form)
         {
             if (string.IsNullOrWhiteSpace((form.Id).ToString()) ||
                 string.IsNullOrEmpty(form.Ticker) ||
@@ -18,7 +18,7 @@ namespace TransactionPlatform.TransactionService.Models
                 form.Volumen == 0 ||
                 string.IsNullOrWhiteSpace(form.UserId) ||
                 form.TransactionTime == null ||
-                form.TransType == TransactionType.Undefined)
+                form.OrderType == OrderType.Undefined)
             {
                 return false;
             }
@@ -26,7 +26,7 @@ namespace TransactionPlatform.TransactionService.Models
 
         }
 
-        public static bool CheckFormDataSemantic(TransactionFormDto form)
+        public static bool CheckFormDataSemantic(OrderFormDto form)
         {
             
             var context = new ValidationContext(form, null, null);
@@ -39,16 +39,16 @@ namespace TransactionPlatform.TransactionService.Models
             return isValid;
         }
        
-        public static bool ValidateWallet(TransactionFormDto form, Wallet wallet)
+        public static bool ValidateWallet(OrderFormDto form, Wallet wallet)
         {
-            if(form.TransType == TransactionType.Sell)
+            if(form.OrderType == OrderType.Sell)
             {
                 var walletAsset = wallet.Assets.Where(a => a.Name == form.Ticker).FirstOrDefault();
                 var isValid = walletAsset != null && walletAsset.Volumen >= form.Volumen;
                 return isValid;
 
             }
-            else if (form.TransType == TransactionType.Buy)
+            else if (form.OrderType == OrderType.Buy)
             {
                 var neededCash = form.Price * form.Volumen;
                 var isValid = wallet.CirculatingMedium.AvailableAmount >= (decimal)neededCash;

@@ -26,11 +26,11 @@ namespace TransactionPlatform.TransactionService.Models
         }
 
         private bool CheckedQueue;
-        private List<TransactionOrder> FloorQueue = new List<TransactionOrder>();
+        private List<Order> FloorQueue = new List<Order>();
 
-        public Dictionary<TransactionOrder, TransactionOrder> MatchingTransactions = new Dictionary<TransactionOrder, TransactionOrder>();
+        public Dictionary<Order, Order> MatchingTransactions = new Dictionary<Order, Order>();
 
-        public void AddOrderToQueue(TransactionOrder order)
+        public void AddOrderToQueue(Order order)
         {
             CheckedQueue = false;
             FloorQueue.Add(order);
@@ -38,42 +38,60 @@ namespace TransactionPlatform.TransactionService.Models
         public bool MatchTransactionOrder()
         {
             var foundMatch = false;
-           
-            foreach (var order in FloorQueue)
+            if (!CheckedQueue)
             {
-                var generalMatchs = FloorQueue.Where(o => o.TransactionForm.Ticker == order.TransactionForm.Ticker
-               && o.TransactionForm.TransType != order.TransactionForm.TransType);
-
-                if(order.TransactionForm.TransType == TransactionType.Buy)
+                foreach (var order in FloorQueue)
                 {
-                    var finalMatchs = generalMatchs.Where(m => m.TransactionForm.Price <= order.TransactionForm.Price).OrderBy(o => o.TransactionForm.Price).ThenBy(o => o.ReceivedDT);
-                    var theMatch = finalMatchs?.FirstOrDefault();
-                    
-                    if(theMatch != null)
+                    var generalMatchs = FloorQueue.Where(o => o.OrderForm.Ticker == order.OrderForm.Ticker
+                   && o.OrderForm.OrderType != order.OrderForm.OrderType);
+
+                    if (order.OrderForm.OrderType == OrderType.Buy)
                     {
-                        foundMatch = true;
-                        MatchingTransactions.Add(order, theMatch);
-                        FloorQueue.Remove(order);
-                        FloorQueue.Remove(theMatch);
+                        foundMatch = MatchBuyOrders(foundMatch, order, generalMatchs);
+                    }
+                    else
+                    {
+                        foundMatch = MatchSellOrders(foundMatch, order, generalMatchs);
                     }
                 }
-                else
-                {
-                    var finalMatchs = generalMatchs.Where(m => m.TransactionForm.Price >= order.TransactionForm.Price).OrderBy(o => o.TransactionForm.Price).ThenBy(o => o.ReceivedDT);
-                    var theMatch = finalMatchs?.FirstOrDefault();
-
-                    if (theMatch != null)
-                    {
-                        foundMatch = true;
-                        MatchingTransactions.Add(order, theMatch);
-                        FloorQueue.Remove(order);
-                        FloorQueue.Remove(theMatch);
-                    }
-                }
-
             }
+            
+            CheckedQueue = true;
             return foundMatch;
         }
 
+        private bool MatchSellOrders(bool foundMatch, Order order, IEnumerable<Order> generalMatchs)
+        {
+            var finalMatchs = generalMatchs.Where(m => m.OrderForm.Price >= order.OrderForm.Price).OrderBy(o => o.OrderForm.Price).ThenBy(o => o.ReceivedDT);
+            var theMatch = finalMatchs?.FirstOrDefault();
+
+            if (theMatch != null)
+            {
+                foundMatch = true;
+                MoveMatchingOrders(order, theMatch);
+            }
+
+            return foundMatch;
+        }
+        private bool MatchBuyOrders(bool foundMatch, Order order, IEnumerable<Order> generalMatchs)
+        {
+            var finalMatchs = generalMatchs.Where(m => m.OrderForm.Price <= order.OrderForm.Price).OrderBy(o => o.OrderForm.Price).ThenBy(o => o.ReceivedDT);
+            var theMatch = finalMatchs?.FirstOrDefault();
+
+            if (theMatch != null)
+            {
+                foundMatch = true;
+                MoveMatchingOrders(order, theMatch);
+            }
+            return foundMatch;
+        }
+        private void MoveMatchingOrders(Order order, Order theMatch)
+        {
+            MatchingTransactions.Add(order, theMatch);
+            FloorQueue.Remove(order);
+            FloorQueue.Remove(theMatch);
+        }
+
+        
     }
 }

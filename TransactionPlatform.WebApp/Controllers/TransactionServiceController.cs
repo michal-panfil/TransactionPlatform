@@ -38,14 +38,14 @@ namespace TransactionPlatform.WebApp.Controllers
                 var userName = User.Identity.Name;
                 var user = await userManager.FindByNameAsync(userName);
 
-                var transDto = new TransactionFormDto()
+                var transDto = new OrderFormDto()
                 {
                     Ticker = ticker,
                     Price = price,
                     Volumen = volumen,
                     TransactionTime = DateTime.Now,
                     UserId = user.Id,
-                    TransType = TransactionType.Buy
+                    OrderType = OrderType.Buy
 
                 };
                 var pricesTask =  serviceClient.AcceptTransactionAsync(transDto);
@@ -61,14 +61,14 @@ namespace TransactionPlatform.WebApp.Controllers
                 var userName = User.Identity.Name;
                 var user = await userManager.FindByNameAsync(userName);
 
-                var transDto = new TransactionFormDto()
+                var transDto = new OrderFormDto()
                 {
                     Ticker = ticker,
                     Price = price,
                     Volumen = volumen,
                     TransactionTime = DateTime.Now,
                     UserId = user.Id,
-                    TransType = TransactionType.Sell
+                    OrderType = OrderType.Sell
 
                 };
                 var pricesTask = serviceClient.AcceptTransactionAsync(transDto);

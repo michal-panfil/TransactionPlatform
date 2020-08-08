@@ -7,6 +7,7 @@ using System.ServiceModel.Web;
 using System.Text;
 using System.Threading.Tasks;
 using TransactionPlatform.DomainLibrary.Dtos;
+using TransactionPlatform.TransactionService.DAL;
 using TransactionPlatform.TransactionService.Models;
 
 namespace TransactionPlatform.TransactionService
@@ -15,8 +16,8 @@ namespace TransactionPlatform.TransactionService
 	// NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
 	public class TransactionService : ITransactionService
 	{
-
-		public TransactionService()
+        public MongoConnector DB { get; set; }
+        public TransactionService()
 		{
 			
 				var processor = OrderProccessor.Instance;
@@ -27,27 +28,46 @@ namespace TransactionPlatform.TransactionService
 			var x = 5;
 
 		}
-		public bool AcceptTransaction(TransactionFormDto transactionDto)
+		public bool AcceptTransaction(OrderFormDto transactionDto)
 		{
 			var orderAccepted = false;
 
-			var order = new TransactionOrder
+			var order = new Order
 			{
 				Id = new Guid(),
-				TransactionForm = transactionDto,
+				OrderForm = transactionDto,
 				ReceivedDT = DateTime.UtcNow,
-				Status = TransactionStatus.New,
+				Status = OrderStatus.New,
 			};
+			DB.AddOrderToDb(order);
+
 			var orderIsValid = ValidateOrder(order);
-			orderAccepted = EntryQueue.AddToQueue(order);
+
+			if (orderIsValid)
+			{
+				orderAccepted = EntryQueue.AddToQueue(order);
+			}
 			
 
 			return orderAccepted;
 		}
 
-		private object ValidateOrder(TransactionOrder order)
+		private bool ValidateOrder(Order order)
 		{
-			throw new NotImplementedException();
+			var isValid = false;
+            if (EntryOrderValidator.CheckFormDataCompleteness(order.OrderForm))
+            {
+                if (EntryOrderValidator.CheckFormDataSemantic(order.OrderForm))
+                {
+					var wallet = new ApiCaller().GetWalletByUserId(order.OrderForm.UserId);
+					if (EntryOrderValidator.ValidateWallet(order.OrderForm, wallet))
+                    {
+						isValid = true;
+                    }
+                }
+            }
+
+			return isValid;
 		}
 
 		public List<InstrumentPriceDto> GetPriceOfAllInstruments()

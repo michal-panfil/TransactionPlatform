@@ -8,9 +8,9 @@ namespace TransactionPlatform.TransactionService.Models
 {
     public class EntryQueue
     {
-        public static Queue<TransactionOrder> TransactionQueue { get; } = new Queue<TransactionOrder>();
+        public static Queue<Order> TransactionQueue { get; } = new Queue<Order>();
 
-        public static bool AddToQueue(TransactionOrder transaction)
+        public static bool AddToQueue(Order transaction)
         {
             var isDuplicated = TransactionQueue.Any(i => i.Id == transaction.Id);
 
@@ -21,7 +21,7 @@ namespace TransactionPlatform.TransactionService.Models
             }
             return false;
         }
-        public static TransactionOrder GetNextTransaction()
+        public static Order GetNextTransaction()
         {
             var nextTransaction =  TransactionQueue.Dequeue();
             return nextTransaction;

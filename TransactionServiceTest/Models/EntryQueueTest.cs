@@ -12,7 +12,7 @@ namespace TransactionServiceTest.Models
         [Test]
         public void AddToQueueTest()
         {
-            var order = new TransactionOrder();
+            var order = new Order();
 
             bool sucessfullAdded = EntryQueue.AddToQueue(order);
             
@@ -22,7 +22,7 @@ namespace TransactionServiceTest.Models
         [Test]
         public void AddToQueueTest_Duplicated()
         {
-            var order = new TransactionOrder();
+            var order = new Order();
 
             var sucessfullAdded = EntryQueue.AddToQueue(order);
             sucessfullAdded = EntryQueue.AddToQueue(order);
@@ -33,8 +33,8 @@ namespace TransactionServiceTest.Models
         [Test]
         public void GetNextTransactionTest()
         {
-            var order = new TransactionOrder();
-            var orderTwo = new TransactionOrder();
+            var order = new Order();
+            var orderTwo = new Order();
             var sucessfullAdded1 = EntryQueue.AddToQueue(order);
             var sucessfullAdded2 = EntryQueue.AddToQueue(orderTwo);
             if (EntryQueue.TransactionQueue.Count == 0) Assert.Fail("Something went wrong woth adding ordet to list"); 

@@ -1,6 +1,6 @@
 ﻿namespace TransactionPlatform.TransactionService.Models
 {
-    public enum TransactionStatus
+    public enum OrderStatus
     {
         New,
         Validated,

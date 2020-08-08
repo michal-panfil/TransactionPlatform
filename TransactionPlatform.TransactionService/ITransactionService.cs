@@ -22,7 +22,7 @@ namespace TransactionPlatform.TransactionService
         List<InstrumentPriceDto> GetPriceOfAllInstruments();
 
         [OperationContract]
-        bool AcceptTransaction(TransactionFormDto transactionDto);
+        bool AcceptTransaction(OrderFormDto transactionDto);
 
     }
 

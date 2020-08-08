@@ -36,14 +36,14 @@ namespace TransactionPlatform.TransactionService
         }
 
 
-        public string ChargeWallet(TransactionFormDto transactionDto)
+        public string ChargeWallet(OrderFormDto transactionDto)
         {
             var sufixUri = @"UsersWallet/ChargeCreditWallt";
             var json = new JsonTextWriter(new StringWriter(new StringBuilder()));
             var textW = new StringWriter(new StringBuilder());
             var jsonSerrializer = new JsonSerializer();
 
-            var transactionPrice = transactionDto.TransType == TransactionType.Buy ? transactionDto.Price * transactionDto.Volumen : transactionDto.Price * transactionDto.Volumen * (-1);
+            var transactionPrice = transactionDto.OrderType == OrderType.Buy ? transactionDto.Price * transactionDto.Volumen : transactionDto.Price * transactionDto.Volumen * (-1);
 
             var transactionData = new ChargeWalletDto{ UserId = transactionDto.UserId, Amount = (decimal)transactionPrice };
 
@@ -58,9 +58,9 @@ namespace TransactionPlatform.TransactionService
 
         }
 
-        public string MoveAsset(TransactionFormDto transactionDto)
+        public string MoveAsset(OrderFormDto transactionDto)
         {
-            var sufixUri = transactionDto.TransType == TransactionType.Buy ?  @"UsersWallet/AddAssetToWallet" : @"UsersWallet/RemoveAssetFromWallet";
+            var sufixUri = transactionDto.OrderType == OrderType.Buy ?  @"UsersWallet/AddAssetToWallet" : @"UsersWallet/RemoveAssetFromWallet";
         
             var json = new JsonTextWriter(new StringWriter(new StringBuilder()));
             var textW = new StringWriter(new StringBuilder());

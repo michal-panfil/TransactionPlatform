@@ -1,17 +1,18 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace TransactionPlatform.DomainLibrary.Dtos
 {
-    public enum TransactionType
+    public enum OrderType
     {
         Undefined = 0,
         Sell,
         Buy
     }
-    public class TransactionFormDto
+    public class OrderFormDto
     {
         [Required]
         [RegularExpression(@"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}")]
@@ -33,13 +34,13 @@ namespace TransactionPlatform.DomainLibrary.Dtos
         [Required]
         public DateTime TransactionTime { get; set; }
 
-        public TransactionType TransType { get; set; }
+        public OrderType OrderType { get; set; }
 
-        public TransactionFormDto()
+        public OrderFormDto()
         {
 
         }
-        public TransactionFormDto(string ticker, float price, int volumen, string userId, DateTime transactionTime, TransactionType transType)
+        public OrderFormDto(string ticker, float price, int volumen, string userId, DateTime transactionTime, OrderType transType)
         {
             Id = Guid.NewGuid();
             Ticker = ticker;
@@ -47,7 +48,7 @@ namespace TransactionPlatform.DomainLibrary.Dtos
             Volumen = volumen;
             UserId = userId;
             TransactionTime = transactionTime;
-            TransType = transType;
+            OrderType = transType;
         }
 
        
