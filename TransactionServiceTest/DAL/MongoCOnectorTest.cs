@@ -13,7 +13,7 @@ namespace TransactionServiceTest.DAL
         [Fact]
         public void AddOrderToDBTest()
         {
-            MongoConnector connector = new MongoConnector();
+            MongoContext connector = new MongoContext();
             var order = new Order()
             {
              //   IsValid = true,

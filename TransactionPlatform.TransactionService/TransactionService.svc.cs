@@ -16,7 +16,7 @@ namespace TransactionPlatform.TransactionService
 	// NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
 	public class TransactionService : ITransactionService
 	{
-        public MongoConnector DB { get; set; }
+        public MongoContext DB { get; set; }
         public TransactionService()
 		{
 			

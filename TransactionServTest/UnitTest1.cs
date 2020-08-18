@@ -12,7 +12,7 @@ namespace TransactionServTest
         [TestMethod]
         public void AddOrderToDBTest()
         {
-            var connector = new MongoConnector();
+            var connector = new MongoContext();
             var order = new Order()
             {
                 IsValid = true,
@@ -24,7 +24,19 @@ namespace TransactionServTest
             connector.AddOrderToDb(order);
 
             var orderFromDB = connector.GetOrderFromDb(order.Id);
-            Assert.IsNotNull(orderFromDB);
+            Assert.IsTrue(orderFromDB.Id ==  order.Id);
         }
+
+        /*
+        [TestMethod]
+        public void ChangeStatusTest()
+        {
+            var connector = new MongoContext();
+
+            var result = connector.ChangeStatus(new Guid("3a4800f7-9e9f-4ba7-8437-f00d3e3f0b6a"), OrderStatus.Accepted);
+            Assert.IsTrue(result == 1);
+
+        }*/
+        //3a4800f7-9e9f-4ba7-8437-f00d3e3f0b6a
     }
 }
