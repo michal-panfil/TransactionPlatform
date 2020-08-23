@@ -18,7 +18,7 @@ namespace TransactionServiceTest.DAL
                IsValid = true,
                 ReceivedDT = DateTime.Now,
                 Status = OrderStatus.New,
-               OrderForm = new OrderFormDto("TST", 12.2f, 1500, "134124134", DateTime.Now, OrderType.Buy)
+               OrderForm = new OrderForm("TST", 12.2f, 1500, "134124134", DateTime.Now, OrderType.Buy)
             };
 
             connector.AddOrderToDb(order) ;

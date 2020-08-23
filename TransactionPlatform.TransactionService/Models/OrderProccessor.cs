@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using TransactionPlatform.TransactionService.DAL;
 
 namespace TransactionPlatform.TransactionService.Models
 {
@@ -11,6 +12,8 @@ namespace TransactionPlatform.TransactionService.Models
 
         private static readonly object padlock = new object();
         private static OrderProccessor instance = null;
+        private IDBContext DB; 
+        
         public static OrderProccessor Instance
         {
             get
@@ -20,12 +23,23 @@ namespace TransactionPlatform.TransactionService.Models
                     if (instance == null)
                     {
                         instance = new OrderProccessor();
+                        Task.Run(() => ProcessUnfinishedOrders());
+                        instance.DB = new MongoContext();
                     }
                     return instance;
                 }
             }
         }
-        
+
+        private static void ProcessUnfinishedOrders()
+        {
+            //TODO:
+            //find in DB all transactions that are not done and cancelled.
+            //group those and add to queues and dictionaries due to their status
+
+            throw new NotImplementedException();
+        }
+
         // it calass is resposinble for workflow of orders and moving them from one stage to another
         private OrderProccessor()
         {
@@ -88,8 +102,19 @@ namespace TransactionPlatform.TransactionService.Models
 
         private bool ProcessTransaction()
         {
-            //move matching orders from
-            return false;
+            var transactions = TheFloor.Instance.MatchingTransactions;
+            TheFloor.Instance.ClearMatchingTransactions();
+            var transactionMaker = new TransactionMaker();
+            transactionMaker.MakeTransactions(transactions);
+            
+            return transactions.Count > 0 ? true : false;
+        }
+        public static void StopProccesingOrder(Guid orderId)
+        {
+            //find in which point of the procces is it and remove it from the local storage
+            //remove orders from ordercollection to Proccessed Orders
+                
+
         }
 
     }

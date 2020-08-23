@@ -26,7 +26,7 @@ namespace ServiceReference1
         System.Threading.Tasks.Task<System.Collections.Generic.List<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto>> GetPriceOfAllInstrumentsAsyncAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITransactionService/AcceptTransaction", ReplyAction="http://tempuri.org/ITransactionService/AcceptTransactionResponse")]
-        System.Threading.Tasks.Task<bool> AcceptTransactionAsync(TransactionPlatform.DomainLibrary.Dtos.OrderFormDto transactionDto);
+        System.Threading.Tasks.Task<bool> AcceptTransactionAsync(TransactionPlatform.DomainLibrary.Dtos.OrderForm transactionDto);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
@@ -94,7 +94,7 @@ namespace ServiceReference1
             return base.Channel.GetPriceOfAllInstrumentsAsyncAsync();
         }
         
-        public System.Threading.Tasks.Task<bool> AcceptTransactionAsync(TransactionPlatform.DomainLibrary.Dtos.OrderFormDto transactionDto)
+        public System.Threading.Tasks.Task<bool> AcceptTransactionAsync(TransactionPlatform.DomainLibrary.Dtos.OrderForm transactionDto)
         {
             return base.Channel.AcceptTransactionAsync(transactionDto);
         }

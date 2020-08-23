@@ -59,7 +59,7 @@ namespace TransactionPlatform.API.Controllers
         [HttpPost]
         [Route("[action]")]
 
-        public async Task<bool> AddAssetToWallet(OrderFormDto transaction)
+        public async Task<bool> AddAssetToWallet(OrderForm transaction)
         {
 
             var asset = new BaseAsset()
@@ -78,7 +78,7 @@ namespace TransactionPlatform.API.Controllers
         [HttpPost]
         [Route("[action]")]
 
-        public async Task<bool> RemoveAssetFromWallet(OrderFormDto transaction)
+        public async Task<bool> RemoveAssetFromWallet(OrderForm transaction)
         {
 
             var asset = new BaseAsset()

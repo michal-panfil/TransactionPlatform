@@ -38,7 +38,7 @@ namespace TransactionPlatform.WebApp.Controllers
                 var userName = User.Identity.Name;
                 var user = await userManager.FindByNameAsync(userName);
 
-                var transDto = new OrderFormDto()
+                var transDto = new OrderForm()
                 {
                     Ticker = ticker,
                     Price = price,
@@ -61,7 +61,7 @@ namespace TransactionPlatform.WebApp.Controllers
                 var userName = User.Identity.Name;
                 var user = await userManager.FindByNameAsync(userName);
 
-                var transDto = new OrderFormDto()
+                var transDto = new OrderForm()
                 {
                     Ticker = ticker,
                     Price = price,

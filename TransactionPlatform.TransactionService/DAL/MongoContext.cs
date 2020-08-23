@@ -12,21 +12,23 @@ using System.IO;
 
 namespace TransactionPlatform.TransactionService.DAL
 {
-    public class MongoContext
+    public class MongoContext : IDBContext
     {
         private string ConnectionString = ConfigurationManager.ConnectionStrings["MongoConnectionString"].ConnectionString;
-  
-        public  void AddOrderToDb(Order order) {
+
+        public void AddOrderToDb(Order order)
+        {
             var client = new MongoClient();
             var db = client.GetDatabase("TransactionMongoDB");
-            var collection = db.GetCollection<Order>("Orders");
+            var collection = db.GetCollection<Order>("ActiveOrders");
             collection.InsertOne(order);
         }
 
-        public async Task<UpdateResult> ChangeStatus(Order order, OrderStatus status) {
+        public async Task<UpdateResult> ChangeStatus(Order order, OrderStatus status)
+        {
             var client = new MongoClient(ConnectionString);
             var db = client.GetDatabase("TransactionMongoDB");
-            var collection = db.GetCollection<Order>("Orders");
+            var collection = db.GetCollection<Order>("ActiveOrders");
 
             var filter = Builders<Order>.Filter.Eq("Id", order.Id);
             var update = Builders<Order>.Update.Set("status", status);
@@ -37,12 +39,44 @@ namespace TransactionPlatform.TransactionService.DAL
         {
             var client = new MongoClient(ConnectionString.ToString());
             var db = client.GetDatabase("TransactionMongoDB");
-            var collection = db.GetCollection<Order>("Orders");
+            var collection = db.GetCollection<Order>("ActiveOrders");
 
 
             var resultTsk = collection.FindAsync(o => o.Id == id);
             var result = await resultTsk;
             return result.FirstOrDefault();
+        }
+
+        public async Task<Order> GetOrderByOrderFormId(Guid orderFromId)
+        {
+            var client = new MongoClient(ConnectionString.ToString());
+            var db = client.GetDatabase("TransactionMongoDB");
+            var collection = db.GetCollection<Order>("ActiveOrders");
+
+
+            var resultTsk = collection.FindAsync(o => o.OrderForm.Id == orderFromId);
+            var result = await resultTsk;
+            return result.FirstOrDefault();
+        }
+
+        public void AddTransactions(List<Transaction> transactions)
+        {
+            var client = new MongoClient(ConnectionString.ToString());
+            var db = client.GetDatabase("TransactionMongoDB");
+            var collection = db.GetCollection<Transaction>("Transactions");
+
+            collection.InsertMany(transactions);
+        }
+        public void MoveOrder(List<Order> orders)
+        {
+            var client = new MongoClient(ConnectionString.ToString());
+            var db = client.GetDatabase("TransactionMongoDB");
+            var collectionActive = db.GetCollection<Order>("ActiveOrders");
+            var collectionFinished = db.GetCollection<Order>("ActiveFinished");
+
+
+            collectionActive.DeleteMany(o =>  orders.Contains(o));
+            collectionFinished.InsertMany(orders);    
         }
     }
 }

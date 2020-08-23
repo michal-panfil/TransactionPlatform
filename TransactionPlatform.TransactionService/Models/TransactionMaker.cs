@@ -2,39 +2,55 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using TransactionPlatform.TransactionService.DAL;
 
 namespace TransactionPlatform.TransactionService.Models
 {
     public class TransactionMaker
     {
-        //save transaction to DB
-        //Sent notification
-        //Sent request to api to update wallet
-
-        public void MakeTransaction(Dictionary<Order, Order> transactions)
+        private IDBContext DB { get; set; }
+        private IApiCaller Api { get; set; }
+        public TransactionMaker()
         {
+            DB = new MongoContext();
+            Api = new ApiCaller();
+        }
+
+        public void MakeTransactions(List<Transaction> transactions)
+        {
+            SaveTransaction(transactions);
+            MoveOrderInDB(transactions);
             foreach (var trans in transactions)
             {
-                SaveTransaction(trans);
+                DB.ChangeStatus(trans.BuyOrder, OrderStatus.Done);
+                DB.ChangeStatus(trans.SellOrder, OrderStatus.Done);
+
                 UpdateWallets(trans);
-                SentNotifications(trans);
             }
 
         }
-        private void SaveTransaction(KeyValuePair<Order, Order> trans)
+
+        private void MoveOrderInDB(List<Transaction> transactions)
         {
-            //to mongo
-            throw new NotImplementedException();
+            var orders = transactions.Select(t => t.SellOrder).ToList();
+            orders.AddRange(transactions.Select(t => t.BuyOrder).ToList());
+            DB.MoveOrder(orders);
         }
-        private void UpdateWallets(KeyValuePair<Order, Order> trans)
+        
+        private void SaveTransaction(List<Transaction> transactions)
         {
-            //callappi
-            throw new NotImplementedException();
+            DB.AddTransactions(transactions);
+            
         }
-        private void SentNotifications(KeyValuePair<Order, Order> trans)
+        private void UpdateWallets(Transaction trans)
         {
-            //create email sender
-            throw new NotImplementedException();
+            
+            Api.ChargeWallet(trans.SellOrder.OrderForm);
+            Api.MoveAsset(trans.SellOrder.OrderForm);
+            
+            Api.ChargeWallet(trans.BuyOrder.OrderForm);
+            Api.MoveAsset(trans.BuyOrder.OrderForm);
+
         }
     }
 }

@@ -18,7 +18,7 @@ namespace TransactionPlatform.TransactionService.Models
         [BsonElement(elementName:"_id")]
         public Guid Id { get; set; }
 
-        public OrderFormDto OrderForm { get; set; }
+        public OrderForm OrderForm { get; set; }
 
         public OrderStatus Status { get; set; }
 

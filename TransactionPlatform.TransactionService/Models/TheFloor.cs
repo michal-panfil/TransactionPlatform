@@ -28,7 +28,8 @@ namespace TransactionPlatform.TransactionService.Models
         private bool CheckedQueue;
         private List<Order> FloorQueue = new List<Order>();
 
-        public Dictionary<Order, Order> MatchingTransactions = new Dictionary<Order, Order>();
+        //TODO : encapsulate it- there shoud be accesing method
+        public List<Transaction> MatchingTransactions = new List<Transaction>();
 
         public void AddOrderToQueue(Order order)
         {
@@ -85,9 +86,18 @@ namespace TransactionPlatform.TransactionService.Models
             }
             return foundMatch;
         }
+
+        internal void ClearMatchingTransactions()
+        {
+            MatchingTransactions = new List<Transaction>();
+        }
+
         private void MoveMatchingOrders(Order order, Order theMatch)
         {
-            MatchingTransactions.Add(order, theMatch);
+            var sellOrder = order.OrderForm.OrderType == OrderType.Sell ? order : theMatch;
+            var buyOrder = order.OrderForm.OrderType == OrderType.Buy ? order : theMatch;
+            var transaction = new Transaction(sellOrder, buyOrder);
+            MatchingTransactions.Add(transaction);
             FloorQueue.Remove(order);
             FloorQueue.Remove(theMatch);
         }

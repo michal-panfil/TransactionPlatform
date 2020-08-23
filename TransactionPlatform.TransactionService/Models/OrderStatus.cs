@@ -8,6 +8,8 @@
         Waiting,
         Processing,
         Accepted,
-        Done
+        Done,
+        Cancelled
+            
     }
 }

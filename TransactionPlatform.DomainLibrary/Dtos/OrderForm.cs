@@ -12,7 +12,7 @@ namespace TransactionPlatform.DomainLibrary.Dtos
         Sell,
         Buy
     }
-    public class OrderFormDto
+    public class OrderForm
     {
         [Required]
         [RegularExpression(@"(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}")]
@@ -36,11 +36,11 @@ namespace TransactionPlatform.DomainLibrary.Dtos
 
         public OrderType OrderType { get; set; }
 
-        public OrderFormDto()
+        public OrderForm()
         {
 
         }
-        public OrderFormDto(string ticker, float price, int volumen, string userId, DateTime transactionTime, OrderType transType)
+        public OrderForm(string ticker, float price, int volumen, string userId, DateTime transactionTime, OrderType transType)
         {
             Id = Guid.NewGuid();
             Ticker = ticker;

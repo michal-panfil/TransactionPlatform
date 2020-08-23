@@ -10,7 +10,7 @@ namespace TransactionPlatform.TransactionService.Models
 {
     public static class EntryOrderValidator
     {
-        public static bool CheckFormDataCompleteness(OrderFormDto form)
+        public static bool CheckFormDataCompleteness(OrderForm form)
         {
             if (string.IsNullOrWhiteSpace((form.Id).ToString()) ||
                 string.IsNullOrEmpty(form.Ticker) ||
@@ -26,7 +26,7 @@ namespace TransactionPlatform.TransactionService.Models
 
         }
 
-        public static bool CheckFormDataSemantic(OrderFormDto form)
+        public static bool CheckFormDataSemantic(OrderForm form)
         {
             
             var context = new ValidationContext(form, null, null);
@@ -39,7 +39,7 @@ namespace TransactionPlatform.TransactionService.Models
             return isValid;
         }
        
-        public static bool ValidateWallet(OrderFormDto form, Wallet wallet)
+        public static bool ValidateWallet(OrderForm form, Wallet wallet)
         {
             if(form.OrderType == OrderType.Sell)
             {

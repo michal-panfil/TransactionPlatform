@@ -141,7 +141,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAL\MongoConnector.cs" />
+    <Compile Include="DAL\IDBContext.cs" />
+    <Compile Include="DAL\MongoContext.cs" />
+    <Compile Include="IApiCaller.cs" />
     <Compile Include="IDataProvider.cs" />
     <Compile Include="Models\EntryOrderValidator.cs" />
     <Compile Include="Models\EntryQueue.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="Models\TheFloor.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderStatus.cs" />
+    <Compile Include="Models\Transaction.cs" />
     <Compile Include="Models\TransactionMaker.cs" />
     <Compile Include="TransactionService.svc.cs">
       <DependentUpon>TransactionService.svc</DependentUpon>

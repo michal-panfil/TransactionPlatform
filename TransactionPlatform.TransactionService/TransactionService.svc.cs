@@ -16,32 +16,26 @@ namespace TransactionPlatform.TransactionService
 	// NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
 	public class TransactionService : ITransactionService
 	{
-        public MongoContext DB { get; set; }
+        public IDBContext DB { get; set; }
         public TransactionService()
 		{
-			
-				var processor = OrderProccessor.Instance;
-			
+			var processor = OrderProccessor.Instance;
 		}
-		public void DoSomething()
-        {
-			var x = 5;
-
-		}
-		public bool AcceptTransaction(OrderFormDto transactionDto)
+		
+		public bool AcceptOrder(OrderForm orderForm)
 		{
 			var orderAccepted = false;
 
 			var order = new Order
 			{
 				Id = new Guid(),
-				OrderForm = transactionDto,
+				OrderForm = orderForm,
 				ReceivedDT = DateTime.UtcNow,
 				Status = OrderStatus.New,
 			};
 			DB.AddOrderToDb(order);
 
-			var orderIsValid = ValidateOrder(order);
+			var orderIsValid = ValidateOrderForm(orderForm);
 
 			if (orderIsValid)
 			{
@@ -52,21 +46,20 @@ namespace TransactionPlatform.TransactionService
 			return orderAccepted;
 		}
 
-		private bool ValidateOrder(Order order)
+		private bool ValidateOrderForm(OrderForm orderForm)
 		{
 			var isValid = false;
-            if (EntryOrderValidator.CheckFormDataCompleteness(order.OrderForm))
+            if (EntryOrderValidator.CheckFormDataCompleteness(orderForm))
             {
-                if (EntryOrderValidator.CheckFormDataSemantic(order.OrderForm))
+                if (EntryOrderValidator.CheckFormDataSemantic(orderForm))
                 {
-					var wallet = new ApiCaller().GetWalletByUserId(order.OrderForm.UserId);
-					if (EntryOrderValidator.ValidateWallet(order.OrderForm, wallet))
+					var wallet = new ApiCaller().GetWalletByUserId(orderForm.UserId);
+					if (EntryOrderValidator.ValidateWallet(orderForm, wallet))
                     {
 						isValid = true;
                     }
                 }
             }
-
 			return isValid;
 		}
 
@@ -102,9 +95,17 @@ namespace TransactionPlatform.TransactionService
 					return priceList;
 				}
 
-		public float GetPriceOfInstrument(int id)
-		{
-			return id * 1.5f;
-		}
-	}
+        public async Task<bool> CancellOrder(Guid orderFromId, string userId)
+        {
+			var order = await DB.GetOrderByOrderFormId(orderFromId);
+			if(order == null || order.Status == OrderStatus.Accepted || order.Status == OrderStatus.Done)
+            {
+				return false;
+            }
+			var update = await DB.ChangeStatus(order, OrderStatus.Cancelled);
+			OrderProccessor.StopProccesingOrder(order.Id);
+			return update.MatchedCount == 1 ? true : false;
+				
+        }
+    }
 }

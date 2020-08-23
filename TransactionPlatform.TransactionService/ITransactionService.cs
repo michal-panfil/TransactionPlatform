@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Threading.Tasks;
 using TransactionPlatform.DomainLibrary.Dtos;
 
 namespace TransactionPlatform.TransactionService
@@ -13,16 +14,15 @@ namespace TransactionPlatform.TransactionService
     [ServiceContract]
     public interface ITransactionService
     {
-
-
-        [OperationContract]
-        float GetPriceOfInstrument(int id);
-
         [OperationContract]
         List<InstrumentPriceDto> GetPriceOfAllInstruments();
 
         [OperationContract]
-        bool AcceptTransaction(OrderFormDto transactionDto);
+        bool AcceptOrder(OrderForm orderDto);
+
+        [OperationContract]
+        Task<bool> CancellOrder(Guid operationId, string userId );
+    
 
     }
 
