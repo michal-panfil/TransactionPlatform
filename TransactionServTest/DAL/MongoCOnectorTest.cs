@@ -12,7 +12,7 @@ namespace TransactionServiceTest.DAL
         [Fact]
         public void AddOrderToDBTest()
         {
-            MongoContext connector = new MongoContext();
+           /* MongoContext connector = new MongoContext();
             var order = new Order()
             {
                IsValid = true,
@@ -21,7 +21,7 @@ namespace TransactionServiceTest.DAL
                OrderForm = new OrderForm("TST", 12.2f, 1500, "134124134", DateTime.Now, OrderType.Buy)
             };
 
-            connector.AddOrderToDb(order) ;
+            connector.AddOrderToDb(order); */
 
         }
     }

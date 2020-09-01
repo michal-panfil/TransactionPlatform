@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
@@ -16,11 +17,18 @@ namespace TransactionPlatform.TransactionService
 	// NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
 	public class TransactionService : ITransactionService
 	{
-        public IDBContext DB { get; set; }
-        public TransactionService()
+
+		//TODO : Add validation
+		public static IDBContext DB { get; set; }
+		public TransactionService()
 		{
-			var processor = OrderProccessor.Instance;
+			
 		}
+		/*public static void Configure(ServiceConfiguration configuration)
+        {
+			DB = OrderProccessor.Instance.DB;
+		}*/
+
 		
 		public bool AcceptOrder(OrderForm orderForm)
 		{
@@ -49,17 +57,17 @@ namespace TransactionPlatform.TransactionService
 		private bool ValidateOrderForm(OrderForm orderForm)
 		{
 			var isValid = false;
-            if (EntryOrderValidator.CheckFormDataCompleteness(orderForm))
-            {
-                if (EntryOrderValidator.CheckFormDataSemantic(orderForm))
-                {
+			if (EntryOrderValidator.CheckFormDataCompleteness(orderForm))
+			{
+				if (EntryOrderValidator.CheckFormDataSemantic(orderForm))
+				{
 					var wallet = new ApiCaller().GetWalletByUserId(orderForm.UserId);
 					if (EntryOrderValidator.ValidateWallet(orderForm, wallet))
-                    {
+					{
 						isValid = true;
-                    }
-                }
-            }
+					}
+				}
+			}
 			return isValid;
 		}
 
@@ -95,17 +103,17 @@ namespace TransactionPlatform.TransactionService
 					return priceList;
 				}
 
-        public async Task<bool> CancellOrder(Guid orderFromId, string userId)
-        {
+		public async Task<bool> CancellOrder(Guid orderFromId, string userId)
+		{
 			var order = await DB.GetOrderByOrderFormId(orderFromId);
 			if(order == null || order.Status == OrderStatus.Accepted || order.Status == OrderStatus.Done)
-            {
+			{
 				return false;
-            }
+			}
 			var update = await DB.ChangeStatus(order, OrderStatus.Cancelled);
 			OrderProccessor.StopProccesingOrder(order.Id);
 			return update.MatchedCount == 1 ? true : false;
 				
-        }
-    }
+		}
+	}
 }

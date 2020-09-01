@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Text;
 using TransactionPlatform.DomainLibrary.Dtos;
@@ -7,6 +8,7 @@ using TransactionPlatform.TransactionService.Models;
 
 namespace TransactionServiceTest.Models
 {
+   
     [TestFixture]
     public class EntryOrderValidatorTest
     {

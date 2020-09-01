@@ -18,6 +18,9 @@ namespace TransactionPlatform.TransactionService
         List<InstrumentPriceDto> GetPriceOfAllInstruments();
 
         [OperationContract]
+        List<InstrumentPriceDto> GetPriceOfAllInstrumentsAsync();
+
+        [OperationContract]
         bool AcceptOrder(OrderForm orderDto);
 
         [OperationContract]

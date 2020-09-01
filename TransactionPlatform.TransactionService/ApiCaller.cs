@@ -20,7 +20,7 @@ namespace TransactionPlatform.TransactionService
 
         public Wallet GetWalletByUserId(string userId)
         {
-            var sufixUri = @"UsersWallet/GetWallet/{" + userId + "}";
+            var sufixUri = @"UsersWallet/GetWallet?id=" + userId ;
             var apiResponse = CallApiGet(sufixUri).Result;
 
             var wallet = JsonConvert.DeserializeObject<Wallet>(apiResponse);

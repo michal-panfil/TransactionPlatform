@@ -14,7 +14,8 @@ namespace TransactionPlatform.TransactionService.DAL
 {
     public class MongoContext : IDBContext
     {
-        private string ConnectionString = ConfigurationManager.ConnectionStrings["MongoConnectionString"].ConnectionString;
+        private static string connection = ConfigurationManager.ConnectionStrings["MongoConnectionString"].ConnectionString;
+        private string ConnectionString = connection;
 
         public void AddOrderToDb(Order order)
         {

@@ -12,7 +12,7 @@ namespace TransactionPlatform.TransactionService.Models
 
         private static readonly object padlock = new object();
         private static OrderProccessor instance = null;
-        private IDBContext DB; 
+        public IDBContext DB; 
         
         public static OrderProccessor Instance
         {
