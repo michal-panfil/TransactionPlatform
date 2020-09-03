@@ -24,10 +24,10 @@ namespace TransactionPlatform.TransactionService
 		{
 			
 		}
-		/*public static void Configure(ServiceConfiguration configuration)
+		public static void Configure(ServiceConfiguration configuration)
         {
 			DB = OrderProccessor.Instance.DB;
-		}*/
+		}
 
 		
 		public bool AcceptOrder(OrderForm orderForm)
@@ -41,15 +41,15 @@ namespace TransactionPlatform.TransactionService
 				ReceivedDT = DateTime.UtcNow,
 				Status = OrderStatus.New,
 			};
-			DB.AddOrderToDb(order);
 
 			var orderIsValid = ValidateOrderForm(orderForm);
 
 			if (orderIsValid)
 			{
+				order.IsValid = orderIsValid;
 				orderAccepted = EntryQueue.AddToQueue(order);
 			}
-			
+			DB.AddOrderToDb(order);
 
 			return orderAccepted;
 		}

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Quartz;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using TransactionPlatform.TransactionService.DAL;
 
 namespace TransactionPlatform.TransactionService.Models
 {
-    public sealed class OrderProccessor
+    public sealed class OrderProccessor: IJob
     {
 
         private static readonly object padlock = new object();
@@ -23,7 +24,7 @@ namespace TransactionPlatform.TransactionService.Models
                     if (instance == null)
                     {
                         instance = new OrderProccessor();
-                        Task.Run(() => ProcessUnfinishedOrders());
+                        
                         instance.DB = new MongoContext();
                     }
                     return instance;
@@ -31,59 +32,24 @@ namespace TransactionPlatform.TransactionService.Models
             }
         }
 
-        private static void ProcessUnfinishedOrders()
+        private async Task ProcessUnfinishedOrders()
         {
             //TODO:
             //find in DB all transactions that are not done and cancelled.
             //group those and add to queues and dictionaries due to their status
 
-            throw new NotImplementedException();
+        //    throw new NotImplementedException();
         }
 
         // it calass is resposinble for workflow of orders and moving them from one stage to another
         private OrderProccessor()
         {
-            Task.Run(()=>
-            {
-                while (true)
-                {
-                    var wasThereAnythingToDo = MoveOrdersFromEntryQueueToMainQueue();
-                    if (!wasThereAnythingToDo)
-                    {
-                        Task.Delay(5000);
-                    }
-                }
-
-
-            });
-
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    var wasThereAnythingToDo = MatchOrdersOnFloor();
-                    if (!wasThereAnythingToDo)
-                    {
-                        Task.Delay(5000);
-                    }
-                }
-            }); 
-            
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    var wasThereAnythingToDo = ProcessTransaction();
-                    if (!wasThereAnythingToDo)
-                    {
-                        Task.Delay(5000);
-                    }
-                }
-            });
+          
         }
 
-        private bool MoveOrdersFromEntryQueueToMainQueue()
+        private async Task<bool> MoveOrdersFromEntryQueueToMainQueue()
         {
+         
             var movedAnyTransactions = false;
             while (EntryQueue.TransactionQueue.Count > 0)
             {
@@ -95,9 +61,9 @@ namespace TransactionPlatform.TransactionService.Models
             return movedAnyTransactions;
         }
 
-        private bool MatchOrdersOnFloor()
+        private  bool MatchOrdersOnFloor()
         {
-            return TheFloor.Instance.MatchTransactionOrder();
+            return   TheFloor.Instance.MatchTransactionOrder();
         }
 
         private bool ProcessTransaction()
@@ -117,5 +83,17 @@ namespace TransactionPlatform.TransactionService.Models
 
         }
 
+        public async Task Execute(IJobExecutionContext context)
+        {
+          var p1 = MoveOrdersFromEntryQueueToMainQueue();
+          var p2 = Task.Run(()=> MatchOrdersOnFloor());
+          var p3 = Task.Run(()=>ProcessTransaction());
+          var p4 = ProcessUnfinishedOrders();
+
+            await p1;
+            await p2;
+            await p3;
+            await p4;
+        }
     }
 }
