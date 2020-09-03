@@ -27,6 +27,7 @@ namespace TransactionPlatform.TransactionService
 		public static void Configure(ServiceConfiguration configuration)
         {
 			DB = OrderProccessor.Instance.DB;
+			Task.Factory.StartNew(()=> OrderProccesorScheduler.Instance.Schedule());
 		}
 
 		

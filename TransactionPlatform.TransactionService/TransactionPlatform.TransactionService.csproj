@@ -196,6 +196,7 @@
     <Compile Include="Models\OrderMatching.cs" />
     <Compile Include="Models\OrderProccesorScheduler.cs" />
     <Compile Include="Models\OrderProccessor.cs" />
+    <Compile Include="Models\Proccessor.cs" />
     <Compile Include="Models\TheFloor.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderStatus.cs" />

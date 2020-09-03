@@ -1,18 +1,19 @@
 ﻿using Quartz;
 using Quartz.Impl;
+using System;
 using System.Threading.Tasks;
 
 namespace TransactionPlatform.TransactionService.Models
 {
- 
     internal class OrderProccesorScheduler
     {
         private static readonly object padlock = new object();
-        public static OrderProccesorScheduler instance = null;
+        private static OrderProccesorScheduler instance = null;
+        private static bool isRunning = false;
 
     private OrderProccesorScheduler()
         {
-            instance = new OrderProccesorScheduler();
+          //  instance = new OrderProccesorScheduler();
         }
         public static OrderProccesorScheduler Instance
         {
@@ -32,23 +33,35 @@ namespace TransactionPlatform.TransactionService.Models
 
         public async Task Schedule()
         {
-            var factory = new StdSchedulerFactory();
-            var scheduler = await factory.GetScheduler();
-            await scheduler.Start();
-            var job = JobBuilder.Create<OrderProccessor>()
-                .WithIdentity("procesor", "main")
-                .Build();
+           
+                try
+                {
+                if (!isRunning)
+                {
+                    isRunning = true;
+                    var factory = new StdSchedulerFactory();
+                    var scheduler = await factory.GetScheduler();
+                    await scheduler.Start();
+                    var job = JobBuilder.Create<Proccessor>()
+                        .WithIdentity("procesor", "main")
+                        .Build();
 
-            var trigger = TriggerBuilder.Create()
-                .WithIdentity("trigger", "main")
-                .StartNow()
-                .WithSimpleSchedule(x => x.WithIntervalInSeconds(5)
-                                        .RepeatForever())
-                .Build();
+                    var trigger = TriggerBuilder.Create()
+                        .WithIdentity("trigger", "main")
+                        .StartNow()
+                        .WithSimpleSchedule(x => x.WithIntervalInSeconds(5)
+                                                .RepeatForever())
+                        .Build();
 
-            await scheduler.ScheduleJob(job, trigger);
-            
-                
+                    await scheduler.ScheduleJob(job, trigger);
+                }
+                    
+                }
+                catch (Exception ex)
+                {
+
+                    isRunning = false;
+                }
         }
     }
 }

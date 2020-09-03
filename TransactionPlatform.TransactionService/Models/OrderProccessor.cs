@@ -8,7 +8,7 @@ using TransactionPlatform.TransactionService.DAL;
 
 namespace TransactionPlatform.TransactionService.Models
 {
-    public sealed class OrderProccessor: IJob
+    public sealed class OrderProccessor
     {
 
         private static readonly object padlock = new object();
@@ -32,7 +32,7 @@ namespace TransactionPlatform.TransactionService.Models
             }
         }
 
-        private async Task ProcessUnfinishedOrders()
+        public async Task ProcessUnfinishedOrders()
         {
             //TODO:
             //find in DB all transactions that are not done and cancelled.
@@ -47,7 +47,7 @@ namespace TransactionPlatform.TransactionService.Models
           
         }
 
-        private async Task<bool> MoveOrdersFromEntryQueueToMainQueue()
+        public async Task<bool> MoveOrdersFromEntryQueueToMainQueue()
         {
          
             var movedAnyTransactions = false;
@@ -61,12 +61,12 @@ namespace TransactionPlatform.TransactionService.Models
             return movedAnyTransactions;
         }
 
-        private  bool MatchOrdersOnFloor()
+        public  bool MatchOrdersOnFloor()
         {
             return   TheFloor.Instance.MatchTransactionOrder();
         }
 
-        private bool ProcessTransaction()
+        public  bool ProcessTransaction()
         {
             var transactions = TheFloor.Instance.MatchingTransactions;
             TheFloor.Instance.ClearMatchingTransactions();
@@ -83,7 +83,7 @@ namespace TransactionPlatform.TransactionService.Models
 
         }
 
-        public async Task Execute(IJobExecutionContext context)
+      /*  public async Task Execute(IJobExecutionContext context)
         {
           var p1 = MoveOrdersFromEntryQueueToMainQueue();
           var p2 = Task.Run(()=> MatchOrdersOnFloor());
@@ -94,6 +94,6 @@ namespace TransactionPlatform.TransactionService.Models
             await p2;
             await p3;
             await p4;
-        }
+        }*/
     }
 }
