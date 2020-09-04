@@ -73,10 +73,18 @@ namespace TransactionPlatform.TransactionService.DAL
             var client = new MongoClient(ConnectionString.ToString());
             var db = client.GetDatabase("TransactionMongoDB");
             var collectionActive = db.GetCollection<Order>("ActiveOrders");
-            var collectionFinished = db.GetCollection<Order>("ActiveFinished");
+            var collectionFinished = db.GetCollection<Order>("FinishedOrders");
 
 
-            collectionActive.DeleteMany(o =>  orders.Contains(o));
+            //TO FIX : delete is not working
+            //collectionActive.DeleteMany(o =>  orders.Contains(o));
+
+            foreach (var order in orders)
+            {
+                collectionActive.DeleteOne<Order>(o => o.Id == order.Id);
+
+            }
+            
             collectionFinished.InsertMany(orders);    
         }
     }
