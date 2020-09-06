@@ -16,17 +16,17 @@ namespace ServiceReference1
     public interface ITransactionService
     {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITransactionService/GetPriceOfInstrument", ReplyAction="http://tempuri.org/ITransactionService/GetPriceOfInstrumentResponse")]
-        System.Threading.Tasks.Task<float> GetPriceOfInstrumentAsync(int id);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITransactionService/GetPriceOfAllInstruments", ReplyAction="http://tempuri.org/ITransactionService/GetPriceOfAllInstrumentsResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.List<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto>> GetPriceOfAllInstrumentsAsync();
+        System.Threading.Tasks.Task<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto[]> GetPriceOfAllInstrumentsAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITransactionService/GetPriceOfAllInstrumentsAsync", ReplyAction="http://tempuri.org/ITransactionService/GetPriceOfAllInstrumentsAsyncResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.List<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto>> GetPriceOfAllInstrumentsAsyncAsync();
+        System.Threading.Tasks.Task<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto[]> GetPriceOfAllInstrumentsAsyncAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITransactionService/AcceptTransaction", ReplyAction="http://tempuri.org/ITransactionService/AcceptTransactionResponse")]
-        System.Threading.Tasks.Task<bool> AcceptTransactionAsync(TransactionPlatform.DomainLibrary.Dtos.OrderForm transactionDto);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITransactionService/AcceptOrder", ReplyAction="http://tempuri.org/ITransactionService/AcceptOrderResponse")]
+        System.Threading.Tasks.Task<bool> AcceptOrderAsync(TransactionPlatform.DomainLibrary.Dtos.OrderForm orderDto);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITransactionService/CancellOrder", ReplyAction="http://tempuri.org/ITransactionService/CancellOrderResponse")]
+        System.Threading.Tasks.Task<bool> CancellOrderAsync(System.Guid operationId, string userId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
@@ -79,24 +79,24 @@ namespace ServiceReference1
         {
         }
         
-        public System.Threading.Tasks.Task<float> GetPriceOfInstrumentAsync(int id)
-        {
-            return base.Channel.GetPriceOfInstrumentAsync(id);
-        }
-        
-        public System.Threading.Tasks.Task<System.Collections.Generic.List<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto>> GetPriceOfAllInstrumentsAsync()
+        public System.Threading.Tasks.Task<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto[]> GetPriceOfAllInstrumentsAsync()
         {
             return base.Channel.GetPriceOfAllInstrumentsAsync();
         }
         
-        public System.Threading.Tasks.Task<System.Collections.Generic.List<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto>> GetPriceOfAllInstrumentsAsyncAsync()
+        public System.Threading.Tasks.Task<TransactionPlatform.DomainLibrary.Dtos.InstrumentPriceDto[]> GetPriceOfAllInstrumentsAsyncAsync()
         {
             return base.Channel.GetPriceOfAllInstrumentsAsyncAsync();
         }
         
-        public System.Threading.Tasks.Task<bool> AcceptTransactionAsync(TransactionPlatform.DomainLibrary.Dtos.OrderForm transactionDto)
+        public System.Threading.Tasks.Task<bool> AcceptOrderAsync(TransactionPlatform.DomainLibrary.Dtos.OrderForm orderDto)
         {
-            return base.Channel.AcceptTransactionAsync(transactionDto);
+            return base.Channel.AcceptOrderAsync(orderDto);
+        }
+        
+        public System.Threading.Tasks.Task<bool> CancellOrderAsync(System.Guid operationId, string userId)
+        {
+            return base.Channel.CancellOrderAsync(operationId, userId);
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()

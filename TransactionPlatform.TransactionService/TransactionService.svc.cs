@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Threading.Tasks;
 using TransactionPlatform.DomainLibrary.Dtos;
+using TransactionPlatform.TransactionService.DAL;
+using TransactionPlatform.TransactionService.Models;
 
 namespace TransactionPlatform.TransactionService
 {
@@ -13,15 +18,74 @@ namespace TransactionPlatform.TransactionService
 	// NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
 	public class TransactionService : ITransactionService
 	{
-		public bool AcceptTransaction(TransactionFormDto transactionDto)
+
+		//TODO : Add validation
+		public static IDBContext DB { get; set; }
+		public TransactionService()
 		{
-			var api = new ApiCaller();
-
-			var charged = api.ChargeWallet(transactionDto);
 			
-				var x = api.MoveAsset(transactionDto);
+		}
+		public static void Configure(ServiceConfiguration configuration)
+        {
+			DB = OrderProccessor.Instance.DB;
+			Task.Factory.StartNew(()=> OrderProccesorScheduler.Instance.Schedule());
+		}
 
-			return true;
+		
+		public bool AcceptOrder(OrderForm orderForm)
+		{
+			var orderAccepted = false;
+
+			var order = new Order
+			{
+				Id = new Guid(),
+				OrderForm = orderForm,
+				ReceivedDT = DateTime.UtcNow,
+				Status = OrderStatus.New,
+			};
+
+			var orderIsValid = ValidateOrderForm(orderForm);
+
+			if (orderIsValid)
+			{
+				order.IsValid = orderIsValid;
+				orderAccepted = EntryQueue.AddToQueue(order);
+			}
+			DB.AddOrderToDb(order);
+
+			return orderAccepted;
+		}
+
+        private Order CreateOppositDummyOrder(OrderForm orderForm)
+        {
+			var orderType = orderForm.OrderType == OrderType.Buy ? OrderType.Sell : OrderType.Buy;
+			var oppositForm = new OrderForm(orderForm.Ticker, orderForm.Price, orderForm.Volumen, "00000000-0000-0000-0000-000000000000", DateTime.Now, orderType);
+
+			var order = new Order
+			{
+				Id = new Guid(),
+				OrderForm = oppositForm,
+				ReceivedDT = DateTime.UtcNow,
+				Status = OrderStatus.New,
+			};
+			return order;
+		}
+
+        private bool ValidateOrderForm(OrderForm orderForm)
+		{
+			var isValid = false;
+			if (EntryOrderValidator.CheckFormDataCompleteness(orderForm))
+			{
+				if (EntryOrderValidator.CheckFormDataSemantic(orderForm))
+				{
+					var wallet = new ApiCaller().GetWalletByUserId(orderForm.UserId);
+					if (EntryOrderValidator.ValidateWallet(orderForm, wallet))
+					{
+						isValid = true;
+					}
+				}
+			}
+			return isValid;
 		}
 
 		public List<InstrumentPriceDto> GetPriceOfAllInstruments()
@@ -56,9 +120,17 @@ namespace TransactionPlatform.TransactionService
 					return priceList;
 				}
 
-		public float GetPriceOfInstrument(int id)
+		public async Task<bool> CancellOrder(Guid orderFromId, string userId)
 		{
-			return id * 1.5f;
+			var order = await DB.GetOrderByOrderFormId(orderFromId);
+			if(order == null || order.Status == OrderStatus.Accepted || order.Status == OrderStatus.Done)
+			{
+				return false;
+			}
+			var update = await DB.ChangeStatus(order, OrderStatus.Cancelled);
+			OrderProccessor.StopProccesingOrder(order.Id);
+			return update.MatchedCount == 1 ? true : false;
+				
 		}
 	}
 }

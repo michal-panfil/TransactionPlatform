@@ -13,14 +13,14 @@ using TransactionPlatform.DomainLibrary.Models.WalletModels;
 
 namespace TransactionPlatform.TransactionService
 {
-    public class ApiCaller
+    internal class ApiCaller : IApiCaller
     {
         public string BaseUri { get; set; } = $"http://localhost:54868/api/";
 
 
         public Wallet GetWalletByUserId(string userId)
         {
-            var sufixUri = @"UsersWallet/GetWallet/{" + userId + "}";
+            var sufixUri = @"UsersWallet/GetWallet?id=" + userId ;
             var apiResponse = CallApiGet(sufixUri).Result;
 
             var wallet = JsonConvert.DeserializeObject<Wallet>(apiResponse);
@@ -31,37 +31,37 @@ namespace TransactionPlatform.TransactionService
             var sufixUri = "Instrument/GetInstruments";
             var apiResponse = CallApiGet(sufixUri).Result;
 
-            var instruments = JsonConvert.DeserializeObject < List<Instrument>>(apiResponse);
+            var instruments = JsonConvert.DeserializeObject<List<Instrument>>(apiResponse);
             return instruments;
         }
 
 
-        public string ChargeWallet(TransactionFormDto transactionDto)
+        public string ChargeWallet(OrderForm transactionDto)
         {
             var sufixUri = @"UsersWallet/ChargeCreditWallt";
             var json = new JsonTextWriter(new StringWriter(new StringBuilder()));
             var textW = new StringWriter(new StringBuilder());
             var jsonSerrializer = new JsonSerializer();
 
-            var transactionPrice = transactionDto.TransType == TransactionType.Buy ? transactionDto.Price * transactionDto.Volumen : transactionDto.Price * transactionDto.Volumen * (-1);
+            var transactionPrice = transactionDto.OrderType == OrderType.Buy ? transactionDto.Price * transactionDto.Volumen : transactionDto.Price * transactionDto.Volumen * (-1);
 
-            var transactionData = new ChargeWalletDto{ UserId = transactionDto.UserId, Amount = (decimal)transactionPrice };
+            var transactionData = new ChargeWalletDto { UserId = transactionDto.UserId, Amount = (decimal)transactionPrice };
 
 
             jsonSerrializer.Serialize(textW, transactionData);
 
             var content = new StringContent(textW.ToString(), Encoding.UTF8, "application/json");
 
-            var response =  CallApiPost(sufixUri, content).Result;
+            var response = CallApiPost(sufixUri, content).Result;
 
             return response;
 
         }
-        
-        internal string MoveAsset(TransactionFormDto transactionDto)
+
+        public string MoveAsset(OrderForm transactionDto)
         {
-            var sufixUri = transactionDto.TransType == TransactionType.Buy ?  @"UsersWallet/AddAssetToWallet" : @"UsersWallet/RemoveAssetFromWallet";
-        
+            var sufixUri = transactionDto.OrderType == OrderType.Buy ? @"UsersWallet/AddAssetToWallet" : @"UsersWallet/RemoveAssetFromWallet";
+
             var json = new JsonTextWriter(new StringWriter(new StringBuilder()));
             var textW = new StringWriter(new StringBuilder());
             var x = new JsonSerializer();
@@ -73,7 +73,7 @@ namespace TransactionPlatform.TransactionService
             var response = CallApiPost(sufixUri, content).Result;
 
 
-            return response; 
+            return response;
         }
 
         public Instrument GetInstrumentByTicker(string ticker)
@@ -83,16 +83,16 @@ namespace TransactionPlatform.TransactionService
             var instrument = JsonConvert.DeserializeObject<Instrument>(apiResponse);
             return instrument;
         }
-        private async Task<string> CallApiGet( string sufixUri)
+        private async Task<string> CallApiGet(string sufixUri)
         {
             using (var httpClient = new HttpClient())
             {
-                using(var response = await httpClient.GetAsync(BaseUri + sufixUri))
+                using (var response = await httpClient.GetAsync(BaseUri + sufixUri))
                 {
                     return await response.Content.ReadAsStringAsync();
                 }
             }
-        } 
+        }
         private async Task<string> CallApiPost(string sufixUri, HttpContent contnet)
         {
             string result;
