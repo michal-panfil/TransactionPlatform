@@ -191,6 +191,7 @@
     <Compile Include="DAL\MongoContext.cs" />
     <Compile Include="IApiCaller.cs" />
     <Compile Include="IDataProvider.cs" />
+    <Compile Include="Models\DemonstrationMode.cs" />
     <Compile Include="Models\EntryOrderValidator.cs" />
     <Compile Include="Models\EntryQueue.cs" />
     <Compile Include="Models\OrderMatching.cs" />

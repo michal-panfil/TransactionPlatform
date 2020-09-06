@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
@@ -55,7 +56,22 @@ namespace TransactionPlatform.TransactionService
 			return orderAccepted;
 		}
 
-		private bool ValidateOrderForm(OrderForm orderForm)
+        private Order CreateOppositDummyOrder(OrderForm orderForm)
+        {
+			var orderType = orderForm.OrderType == OrderType.Buy ? OrderType.Sell : OrderType.Buy;
+			var oppositForm = new OrderForm(orderForm.Ticker, orderForm.Price, orderForm.Volumen, "00000000-0000-0000-0000-000000000000", DateTime.Now, orderType);
+
+			var order = new Order
+			{
+				Id = new Guid(),
+				OrderForm = oppositForm,
+				ReceivedDT = DateTime.UtcNow,
+				Status = OrderStatus.New,
+			};
+			return order;
+		}
+
+        private bool ValidateOrderForm(OrderForm orderForm)
 		{
 			var isValid = false;
 			if (EntryOrderValidator.CheckFormDataCompleteness(orderForm))
