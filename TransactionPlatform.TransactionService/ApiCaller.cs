@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,18 +19,18 @@ namespace TransactionPlatform.TransactionService
         public string BaseUri { get; set; } = $"http://localhost:54868/api/";
 
 
-        public Wallet GetWalletByUserId(string userId)
+        public async Task<Wallet> GetWalletByUserId(string userId)
         {
             var sufixUri = @"UsersWallet/GetWallet?id=" + userId ;
-            var apiResponse = CallApiGet(sufixUri).Result;
-
-            var wallet = JsonConvert.DeserializeObject<Wallet>(apiResponse);
+            var apiResponse = await CallApiGet(sufixUri);
+            if (apiResponse.Equals("Failed")) return null;
+            var wallet = JsonConvert.DeserializeObject<Wallet>( apiResponse);
             return wallet;
         }
-        public List<Instrument> GetAllInstruments()
+        public async Task<List<Instrument>> GetAllInstruments()
         {
             var sufixUri = "Instrument/GetInstruments";
-            var apiResponse = CallApiGet(sufixUri).Result;
+            var apiResponse = await CallApiGet(sufixUri);
 
             var instruments = JsonConvert.DeserializeObject<List<Instrument>>(apiResponse);
             return instruments;
@@ -58,7 +59,7 @@ namespace TransactionPlatform.TransactionService
 
         }
 
-        public string MoveAsset(OrderForm transactionDto)
+        public async Task<string> MoveAsset(OrderForm transactionDto)
         {
             var sufixUri = transactionDto.OrderType == OrderType.Buy ? @"UsersWallet/AddAssetToWallet" : @"UsersWallet/RemoveAssetFromWallet";
 
@@ -70,40 +71,60 @@ namespace TransactionPlatform.TransactionService
             var content = new StringContent(textW.ToString(), Encoding.UTF8, "application/json");
 
 
-            var response = CallApiPost(sufixUri, content).Result;
+            var response = await CallApiPost(sufixUri, content);
 
 
             return response;
         }
 
-        public Instrument GetInstrumentByTicker(string ticker)
+        public async Task<Instrument> GetInstrumentByTicker(string ticker)
         {
             var sufixUri = @"Instrument/{" + ticker + "}";
-            var apiResponse = CallApiGet(sufixUri).Result;
+            var apiResponse = await CallApiGet(sufixUri);
             var instrument = JsonConvert.DeserializeObject<Instrument>(apiResponse);
             return instrument;
         }
         private async Task<string> CallApiGet(string sufixUri)
         {
-            using (var httpClient = new HttpClient())
+            try
             {
-                using (var response = await httpClient.GetAsync(BaseUri + sufixUri))
+                using (var httpClient = new HttpClient())
                 {
-                    return await response.Content.ReadAsStringAsync();
+                    using (var response = await httpClient.GetAsync(BaseUri + sufixUri))
+                    {
+                        return await response.Content.ReadAsStringAsync();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Log.Error($"{sufixUri}, {ex.Message}" );
+                return "failed";
+            }
+            
         }
         private async Task<string> CallApiPost(string sufixUri, HttpContent contnet)
         {
-            string result;
-            using (var httpClient = new HttpClient())
+            try
             {
-                using (var response = await httpClient.PostAsync(BaseUri + sufixUri, contnet))
+                string result;
+                using (var httpClient = new HttpClient())
                 {
-                    result = await response.Content.ReadAsStringAsync();
-                };
+                    using (var response = await httpClient.PostAsync(BaseUri + sufixUri, contnet))
+                    {
+                        result = await response.Content.ReadAsStringAsync();
+                    };
+                }
+                return result;
             }
-            return result;
+            catch (Exception ex)
+            {
+                Log.Error($"{sufixUri}, {ex.Message}");
+
+                return "failed";
+
+            }
+
         }
     }
 }

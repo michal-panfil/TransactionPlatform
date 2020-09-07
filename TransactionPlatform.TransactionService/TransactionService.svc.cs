@@ -38,7 +38,7 @@ namespace TransactionPlatform.TransactionService
         }
 
 
-        public bool AcceptOrder(OrderForm orderForm)
+        public async Task<bool> AcceptOrder(OrderForm orderForm)
         {
             try
             {
@@ -53,9 +53,9 @@ namespace TransactionPlatform.TransactionService
                     Status = OrderStatus.New,
                 };
 
-                var orderIsValid = ValidateOrderForm(orderForm);
+                var orderIsValid = await ValidateOrderForm(orderForm);
 
-                if (orderIsValid)
+                if ( orderIsValid)
                 {
                     order.IsValid = orderIsValid;
                     orderAccepted = EntryQueue.AddToQueue(order);
@@ -78,14 +78,17 @@ namespace TransactionPlatform.TransactionService
 
 
 
-        private bool ValidateOrderForm(OrderForm orderForm)
+        private async Task<bool> ValidateOrderForm(OrderForm orderForm)
         {
             var isValid = false;
             if (EntryOrderValidator.CheckFormDataCompleteness(orderForm))
             {
                 if (EntryOrderValidator.CheckFormDataSemantic(orderForm))
                 {
-                    var wallet = new ApiCaller().GetWalletByUserId(orderForm.UserId);
+                    var wallet = await new ApiCaller().GetWalletByUserId(orderForm.UserId);
+                    
+                    if (wallet is null) return false;
+
                     if (EntryOrderValidator.ValidateWallet(orderForm, wallet))
                     {
                         isValid = true;
@@ -95,13 +98,13 @@ namespace TransactionPlatform.TransactionService
             return isValid;
         }
 
-        public List<InstrumentPriceDto> GetPriceOfAllInstruments()
+        public async Task<List<InstrumentPriceDto>> GetPriceOfAllInstruments()
         {
             var rnd = new Random();
             var priceList = new List<InstrumentPriceDto>();
 
             var api = new ApiCaller();
-            var instruments = api.GetAllInstruments();
+            var instruments = await api.GetAllInstruments();
 
             foreach (var instrument in instruments)
             {
@@ -111,13 +114,13 @@ namespace TransactionPlatform.TransactionService
             return priceList;
         }
 
-        public List<InstrumentPriceDto> GetPriceOfAllInstrumentsAsync()
+        public async  Task<List<InstrumentPriceDto>> GetPriceOfAllInstrumentsAsync()
         {
 
             var priceList = new List<InstrumentPriceDto>();
 
             var api = new ApiCaller();
-            var instruments = api.GetAllInstruments();
+            var instruments = await api.GetAllInstruments();
 
             foreach (var instrument in instruments)
             {

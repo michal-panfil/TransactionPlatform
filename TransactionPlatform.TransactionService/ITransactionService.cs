@@ -15,13 +15,13 @@ namespace TransactionPlatform.TransactionService
     public interface ITransactionService
     {
         [OperationContract]
-        List<InstrumentPriceDto> GetPriceOfAllInstruments();
+        Task<List<InstrumentPriceDto>> GetPriceOfAllInstruments();
 
         [OperationContract]
-        List<InstrumentPriceDto> GetPriceOfAllInstrumentsAsync();
+        Task<List<InstrumentPriceDto>> GetPriceOfAllInstrumentsAsync();
 
         [OperationContract]
-        bool AcceptOrder(OrderForm orderDto);
+        Task<bool> AcceptOrder(OrderForm orderDto);
 
         [OperationContract]
         Task<bool> CancellOrder(Guid operationId, string userId );
