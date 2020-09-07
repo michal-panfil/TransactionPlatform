@@ -77,23 +77,13 @@ namespace TransactionPlatform.TransactionService.Models
         }
         public static void StopProccesingOrder(Guid orderId)
         {
-            //find in which point of the procces is it and remove it from the local storage
-            //remove orders from ordercollection to Proccessed Orders
+            throw new NotImplementedException();
+            //find in which point of the procces is order and remove it from the local storage
+            //move orders from ordercollection to Proccessed Orders
                 
 
         }
 
-      /*  public async Task Execute(IJobExecutionContext context)
-        {
-          var p1 = MoveOrdersFromEntryQueueToMainQueue();
-          var p2 = Task.Run(()=> MatchOrdersOnFloor());
-          var p3 = Task.Run(()=>ProcessTransaction());
-          var p4 = ProcessUnfinishedOrders();
-
-            await p1;
-            await p2;
-            await p3;
-            await p4;
-        }*/
+  
     }
 }

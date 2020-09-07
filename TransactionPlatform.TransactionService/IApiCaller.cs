@@ -10,7 +10,7 @@ namespace TransactionPlatform.TransactionService
     {
         string BaseUri { get; set; }
 
-        string ChargeWallet(OrderForm transactionDto);
+        Task<string> ChargeWallet(OrderForm transactionDto);
         Task<List<Instrument>> GetAllInstruments();
         Task<Instrument> GetInstrumentByTicker(string ticker);
         Task<Wallet> GetWalletByUserId(string userId);

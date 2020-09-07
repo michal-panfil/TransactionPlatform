@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using TransactionPlatform.TransactionService.DAL;
 
@@ -42,15 +43,19 @@ namespace TransactionPlatform.TransactionService.Models
             DB.AddTransactions(transactions);
             
         }
-        private void UpdateWallets(Transaction trans)
+        private async Task<bool> UpdateWallets(Transaction trans)
         {
             
-            Api.ChargeWallet(trans.SellOrder.OrderForm);
-            Api.MoveAsset(trans.SellOrder.OrderForm);
-            
-            Api.ChargeWallet(trans.BuyOrder.OrderForm);
-            Api.MoveAsset(trans.BuyOrder.OrderForm);
+            var t1 = Api.ChargeWallet(trans.SellOrder.OrderForm);
+            var t2 = Api.MoveAsset(trans.SellOrder.OrderForm);
 
+            var t3 = Api.ChargeWallet(trans.BuyOrder.OrderForm);
+            var t4 = Api.MoveAsset(trans.BuyOrder.OrderForm);
+
+
+            Task[] tasks = new Task[] { t1, t2, t3, t4 };
+            Task.WaitAll(tasks);
+            return true;
         }
     }
 }

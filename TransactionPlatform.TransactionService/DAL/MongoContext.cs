@@ -17,12 +17,12 @@ namespace TransactionPlatform.TransactionService.DAL
         private static string connection = ConfigurationManager.ConnectionStrings["MongoConnectionString"].ConnectionString;
         private string ConnectionString = connection;
 
-        public void AddOrderToDb(Order order)
+        public async Task AddOrderToDb(Order order)
         {
             var client = new MongoClient();
             var db = client.GetDatabase("TransactionMongoDB");
             var collection = db.GetCollection<Order>("ActiveOrders");
-            collection.InsertOne(order);
+            await collection.InsertOneAsync(order);
         }
 
         public async Task<UpdateResult> ChangeStatus(Order order, OrderStatus status)
@@ -60,32 +60,27 @@ namespace TransactionPlatform.TransactionService.DAL
             return result.FirstOrDefault();
         }
 
-        public void AddTransactions(List<Transaction> transactions)
+        public async Task AddTransactions(List<Transaction> transactions)
         {
             var client = new MongoClient(ConnectionString.ToString());
             var db = client.GetDatabase("TransactionMongoDB");
             var collection = db.GetCollection<Transaction>("Transactions");
 
-            collection.InsertMany(transactions);
+            await collection.InsertManyAsync(transactions);
         }
-        public void MoveOrder(List<Order> orders)
+        public async Task MoveOrder(List<Order> orders)
         {
             var client = new MongoClient(ConnectionString.ToString());
             var db = client.GetDatabase("TransactionMongoDB");
             var collectionActive = db.GetCollection<Order>("ActiveOrders");
             var collectionFinished = db.GetCollection<Order>("FinishedOrders");
 
-
-            //TO FIX : delete is not working
-            //collectionActive.DeleteMany(o =>  orders.Contains(o));
-
             foreach (var order in orders)
             {
-                collectionActive.DeleteOne<Order>(o => o.Id == order.Id);
-
+                await collectionActive.DeleteOneAsync<Order>(o => o.Id == order.Id);
             }
             
-            collectionFinished.InsertMany(orders);    
+            await collectionFinished.InsertManyAsync(orders);    
         }
     }
 }

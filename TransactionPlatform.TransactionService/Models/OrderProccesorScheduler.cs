@@ -11,10 +11,6 @@ namespace TransactionPlatform.TransactionService.Models
         private static OrderProccesorScheduler instance = null;
         private static bool isRunning = false;
 
-    private OrderProccesorScheduler()
-        {
-          //  instance = new OrderProccesorScheduler();
-        }
         public static OrderProccesorScheduler Instance
         {
             get
@@ -29,13 +25,11 @@ namespace TransactionPlatform.TransactionService.Models
                 }
             }
         }
-        
 
         public async Task Schedule()
         {
-           
-                try
-                {
+            try
+            {
                 if (!isRunning)
                 {
                     isRunning = true;
@@ -55,13 +49,11 @@ namespace TransactionPlatform.TransactionService.Models
 
                     await scheduler.ScheduleJob(job, trigger);
                 }
-                    
-                }
-                catch (Exception ex)
-                {
-
-                    isRunning = false;
-                }
+            }
+            catch (Exception)
+            {
+                isRunning = false;
+            }
         }
     }
 }

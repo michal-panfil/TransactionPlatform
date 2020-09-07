@@ -23,7 +23,7 @@ namespace TransactionPlatform.TransactionService
         {
             var sufixUri = @"UsersWallet/GetWallet?id=" + userId ;
             var apiResponse = await CallApiGet(sufixUri);
-            if (apiResponse.Equals("Failed")) return null;
+            if (apiResponse.Equals("failed")) return null;
             var wallet = JsonConvert.DeserializeObject<Wallet>( apiResponse);
             return wallet;
         }
@@ -37,10 +37,10 @@ namespace TransactionPlatform.TransactionService
         }
 
 
-        public string ChargeWallet(OrderForm transactionDto)
+        public async Task<string> ChargeWallet(OrderForm transactionDto)
         {
             var sufixUri = @"UsersWallet/ChargeCreditWallt";
-            var json = new JsonTextWriter(new StringWriter(new StringBuilder()));
+            
             var textW = new StringWriter(new StringBuilder());
             var jsonSerrializer = new JsonSerializer();
 
@@ -53,7 +53,7 @@ namespace TransactionPlatform.TransactionService
 
             var content = new StringContent(textW.ToString(), Encoding.UTF8, "application/json");
 
-            var response = CallApiPost(sufixUri, content).Result;
+            var response = await CallApiPost(sufixUri, content);
 
             return response;
 
@@ -72,7 +72,7 @@ namespace TransactionPlatform.TransactionService
 
 
             var response = await CallApiPost(sufixUri, content);
-
+            if (response.Equals("failed")) return null;
 
             return response;
         }

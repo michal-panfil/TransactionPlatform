@@ -8,11 +8,11 @@ namespace TransactionPlatform.TransactionService.DAL
 {
     public interface IDBContext
     {
-        void AddOrderToDb(Order order);
+        Task AddOrderToDb(Order order);
         Task<UpdateResult> ChangeStatus(Order order, OrderStatus status);
         Task<Order> GetOrderByOrderFormId(Guid orderFromId);
         Task<Order> GetOrderFromDb(Guid id);
-        void AddTransactions(List<Transaction> matches);
-        void MoveOrder(List<Order> orders);
+        Task AddTransactions(List<Transaction> matches);
+        Task MoveOrder(List<Order> orders);
     }
 }

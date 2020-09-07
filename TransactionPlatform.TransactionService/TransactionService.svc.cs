@@ -19,13 +19,8 @@ namespace TransactionPlatform.TransactionService
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class TransactionService : ITransactionService
     {
-
-        //TODO : Add validation
         public static IDBContext DB { get; set; }
-        public TransactionService()
-        {
-            
-        }
+        
         public static void Configure(ServiceConfiguration configuration)
         {
             DB = OrderProccessor.Instance.DB;
@@ -33,7 +28,7 @@ namespace TransactionPlatform.TransactionService
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File("logs\\log-.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File("logs\\TransactionService\\log-.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
         }
 
@@ -43,6 +38,7 @@ namespace TransactionPlatform.TransactionService
             try
             {
                 Log.Information($"Received order {orderForm.Id}, from {orderForm.UserId}, operation : {orderForm.OrderType.ToString()}, {orderForm.Ticker}, {orderForm.Price}, {orderForm.Volumen}");
+                
                 var orderAccepted = false;
 
                 var order = new Order
@@ -64,7 +60,8 @@ namespace TransactionPlatform.TransactionService
                 {
                     Log.Warning($"Order {orderForm.Id} is not valid");
                 }
-                DB.AddOrderToDb(order);
+
+               await DB.AddOrderToDb(order);
 
                 return orderAccepted;
             }
@@ -98,6 +95,7 @@ namespace TransactionPlatform.TransactionService
             return isValid;
         }
 
+        //TODO: It is only pleaceholder
         public async Task<List<InstrumentPriceDto>> GetPriceOfAllInstruments()
         {
             var rnd = new Random();
@@ -113,6 +111,7 @@ namespace TransactionPlatform.TransactionService
 
             return priceList;
         }
+        //TODO: It is only pleaceholder
 
         public async  Task<List<InstrumentPriceDto>> GetPriceOfAllInstrumentsAsync()
         {

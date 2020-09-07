@@ -14,10 +14,9 @@ namespace TransactionPlatform.TransactionService.Models
             var p3 = Task.Run(() => orderProccessor.ProcessTransaction());
             var p4 = orderProccessor.ProcessUnfinishedOrders();
 
-            await p1;
-            await p2;
-            await p3;
-            await p4;
+            var tasks = new Task[] { p1, p2, p3, p4 };
+            Task.WaitAll(tasks);
+            
         }
     }
 }

@@ -28,7 +28,7 @@ namespace TransactionPlatform.TransactionService.Models
         private bool CheckedQueue;
         private List<Order> FloorQueue = new List<Order>();
 
-        //TODO : encapsulate it- there shoud be accesing method
+        //TODO : encapsulate it- there shoud be accesing set method
         public List<Transaction> MatchingTransactions = new List<Transaction>();
 
         public void AddOrderToQueue(Order order)
