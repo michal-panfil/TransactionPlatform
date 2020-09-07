@@ -22,6 +22,7 @@ namespace TransactionServiceTest
             -one waller with enough instrument
             */
             var service = new TransactionService();
+            
             var orderForm1 = new OrderForm("TST", 5.55f, 100, "b8846332-7262-44b1-ba60-0b92552f0b3a", DateTime.Now, OrderType.Buy);
             var orderForm2 = new OrderForm("TST", 5.55f, 100, "b8846332-7262-44b1-ba60-0b92552f0b3b", DateTime.Now, OrderType.Sell);
 
